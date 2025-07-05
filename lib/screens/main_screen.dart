@@ -14,9 +14,9 @@ class _MainScreenState extends State<MainScreen> {
   // قائمة الشاشات (يتم استبدال الحاويات بالشاشات الفعلية لاحقًا)
   final List<Widget> _screens = [
     Center(child: Text('قائمة المنتجات')), // ProductListScreen
-    Center(child: Text('إضافة منتج')),     // AddProductScreen
-    Center(child: Text('الإحصائيات')),     // StatisticsScreen
-    Center(child: Text('الإعدادات')),      // SettingsScreen
+    Center(child: Text('إضافة منتج')), // AddProductScreen
+    Center(child: Text('الإحصائيات')), // StatisticsScreen
+    Center(child: Text('الإعدادات')), // SettingsScreen
   ];
 
   void _onItemTapped(int index) {
