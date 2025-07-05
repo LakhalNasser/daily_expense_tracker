@@ -64,7 +64,7 @@ MainScreen (الرئيسية)
 | -- | ------------------ | ------------------------------------------------- | ------------------- | -- | --- | ---------------------------------------------------------------- | --------------------- |
 | ✅ | هيكل التطبيق       | إعداد BottomNavigationBar للتنقل بين الشاشات      | 2025-07-05 10:42    | ✅ | ✅  | `BottomNavigationBar` + `PageView` أو `IndexedStack`             | `feature/main-screen` |
 | ✅ | شريط التطبيق       | AppBar مع عنوان متغير حسب الصفحة الحالية          | 2025-07-05 10:45    | ✅ | ✅  | `AppBar` مع `title` ديناميكي                                     | `feature/main-screen` |
-| ⬜️ | زر الإضافة السريع   | FAB لإضافة منتج جديد مباشرة                       | -                   | ⬜️ | ⬜️  | `FloatingActionButton` مع انتقال إلى AddProductScreen            | `feature/main-screen` |
+| ✅ | زر الإضافة السريع   | FAB لإضافة منتج جديد مباشرة                       | 2025-07-05 10:48    | ✅ | ✅  | `FloatingActionButton` مع انتقال إلى AddProductScreen            | `feature/main-screen` |
 | ⬜️ | إدارة حالة التنقل  | حفظ الصفحة الحالية واستعادتها                     | -                   | ⬜️ | ⬜️  | `provider` أو `bloc` لإدارة الحالة                              | `feature/main-screen` |
 | ⬜️ | تحسين الأداء       | تحميل الشاشات بشكل كسول (lazy loading)            | -                   | ⬜️ | ⬜️  | `IndexedStack` أو التحميل عند الطلب                              | `feature/main-screen` |
 | ⬜️ | انتقالات سلسة      | انتقالات متحركة بين الشاشات                       | -                   | ⬜️ | ⬜️  | `PageTransitionsBuilder` المناسب                                 | `feature/main-screen` |
