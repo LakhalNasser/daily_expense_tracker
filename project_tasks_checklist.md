@@ -79,7 +79,7 @@ MainScreen (الرئيسية)
 | ✅ | إنشاء الحقول    | حقل الاسم، المبلغ، التصنيف، التاريخ، الملاحظات | 2025-07-05 11:32    | ✅ | ✅  | `TextFormField` + `DropdownButtonFormField` + `DatePicker`        | `feature/add-product-ui` |
 | ✅ | اختيار الصورة   | رفع صورة من الكاميرا أو المعرض                 | 2025-07-05 11:52    | ✅ | ✅  | مكتبة `image_picker`، مع عرض الصورة المختارة                          | `feature/add-product-ui` |
 | ✅ | التحقق من القيم | التحقق من الاسم والمبلغ والتصنيف               | 2025-07-05 11:45    | ✅ | ✅  | `Form + GlobalKey<FormState>` مع تحقق رقمي للمبلغ                 | `feature/add-product-ui` |
-| ⬜️ | حفظ المنتج      | إنشاء كائن JSON وحفظه في الملف                 | -                   | ⬜️ | ⬜️  | `jsonEncode()` + `File.writeAsString()`                           | `feature/json-storage`   |
+| ✅ | حفظ المنتج      | إنشاء كائن JSON وحفظه في الملف                 | 2025-07-05 12:00    | ✅ | ✅  | `jsonEncode()` + `File.writeAsString()` مع path_provider          | `feature/json-storage`   |
 | ⬜️ | عرض رسالة       | Snackbar أو Alert بعد الحفظ                    | -                   | ⬜️ | ⬜️  | `ScaffoldMessenger`                                               | `feature/add-product-ui` |
 
 ---

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+import 'package:path_provider/path_provider.dart';
+import '../models/product_model.dart';
 
 class AddProductScreen extends StatefulWidget {
   const AddProductScreen({Key? key}) : super(key: key);
@@ -58,6 +60,29 @@ class _AddProductScreenState extends State<AddProductScreen> {
         _pickedImage = File(image.path);
       });
     }
+  }
+
+  Future<void> _saveProduct() async {
+    if (!_formKey.currentState!.validate()) return;
+    final product = ProductModel(
+      name: _nameController.text.trim(),
+      amount: num.parse(_amountController.text.trim()),
+      category: _selectedCategory!,
+      date: _selectedDate ?? DateTime.now(),
+      notes: _notesController.text.trim().isEmpty ? null : _notesController.text.trim(),
+      imagePath: _pickedImage?.path,
+    );
+    final dir = await getApplicationDocumentsDirectory();
+    final file = File('${dir.path}/products.json');
+    List<ProductModel> products = [];
+    if (await file.exists()) {
+      final content = await file.readAsString();
+      if (content.isNotEmpty) {
+        products = ProductModel.decodeList(content);
+      }
+    }
+    products.add(product);
+    await file.writeAsString(ProductModel.encodeList(products));
   }
 
   @override
@@ -140,48 +165,60 @@ class _AddProductScreenState extends State<AddProductScreen> {
               ),
               const SizedBox(height: 24),
               // حقل الصورة
-              Row(
-                children: [
-                  _pickedImage != null
-                      ? ClipRRect(
-                          borderRadius: BorderRadius.circular(8),
-                          child: Image.file(
-                            _pickedImage!,
-                            width: 80,
-                            height: 80,
-                            fit: BoxFit.cover,
-                          ),
-                        )
-                      : Container(
-                          width: 80,
-                          height: 80,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: const Icon(Icons.image, size: 40, color: Colors.grey),
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  final double size = constraints.maxWidth > 200 ? 120 : 80;
+                  return Row(
+                    children: [
+                      _pickedImage != null
+                          ? ClipRRect(
+                              borderRadius: BorderRadius.circular(8),
+                              child: Image.file(
+                                _pickedImage!,
+                                width: size,
+                                height: size,
+                                fit: BoxFit.cover,
+                              ),
+                            )
+                          : Container(
+                              width: size,
+                              height: size,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: const Icon(Icons.image, size: 40, color: Colors.grey),
+                            ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            ElevatedButton.icon(
+                              onPressed: () => _pickImage(ImageSource.gallery),
+                              icon: const Icon(Icons.photo),
+                              label: const Text('من المعرض'),
+                            ),
+                            const SizedBox(height: 8),
+                            ElevatedButton.icon(
+                              onPressed: () => _pickImage(ImageSource.camera),
+                              icon: const Icon(Icons.camera_alt),
+                              label: const Text('من الكاميرا'),
+                            ),
+                          ],
                         ),
-                  const SizedBox(width: 16),
-                  ElevatedButton.icon(
-                    onPressed: () => _pickImage(ImageSource.gallery),
-                    icon: const Icon(Icons.photo),
-                    label: const Text('من المعرض'),
-                  ),
-                  const SizedBox(width: 8),
-                  ElevatedButton.icon(
-                    onPressed: () => _pickImage(ImageSource.camera),
-                    icon: const Icon(Icons.camera_alt),
-                    label: const Text('من الكاميرا'),
-                  ),
-                ],
+                      ),
+                    ],
+                  );
+                },
               ),
               const SizedBox(height: 16),
               ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
                   if (_formKey.currentState!.validate()) {
-                    // سيتم الحفظ لاحقًا
+                    await _saveProduct();
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('تم التحقق من البيانات!')),
+                      const SnackBar(content: Text('تم حفظ المنتج بنجاح!')),
                     );
                   }
                 },
