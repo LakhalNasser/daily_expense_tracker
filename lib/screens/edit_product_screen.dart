@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/product_model.dart';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
+import 'package:image_picker/image_picker.dart';
 
 class EditProductScreen extends StatefulWidget {
   final int productIndex;
@@ -140,7 +141,80 @@ class _EditProductScreenState extends State<EditProductScreen> {
                 maxLines: 2,
               ),
               const SizedBox(height: 24),
-              Text('واجهة تعديل المنتج (تحت التطوير)'),
+              // حقل الصورة
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  final double size = constraints.maxWidth > 200 ? 120 : 80;
+                  return Row(
+                    children: [
+                      _imagePath != null
+                          ? ClipRRect(
+                              borderRadius: BorderRadius.circular(8),
+                              child: Image.file(
+                                File(_imagePath!),
+                                width: size,
+                                height: size,
+                                fit: BoxFit.cover,
+                              ),
+                            )
+                          : Container(
+                              width: size,
+                              height: size,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: const Icon(Icons.image, size: 40, color: Colors.grey),
+                            ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            ElevatedButton.icon(
+                              onPressed: () async {
+                                final picker = ImagePicker();
+                                final image = await picker.pickImage(source: ImageSource.gallery, imageQuality: 75);
+                                if (image != null) {
+                                  setState(() {
+                                    _imagePath = image.path;
+                                  });
+                                }
+                              },
+                              icon: const Icon(Icons.photo),
+                              label: const Text('من المعرض'),
+                            ),
+                            const SizedBox(height: 8),
+                            ElevatedButton.icon(
+                              onPressed: () async {
+                                final picker = ImagePicker();
+                                final image = await picker.pickImage(source: ImageSource.camera, imageQuality: 75);
+                                if (image != null) {
+                                  setState(() {
+                                    _imagePath = image.path;
+                                  });
+                                }
+                              },
+                              icon: const Icon(Icons.camera_alt),
+                              label: const Text('من الكاميرا'),
+                            ),
+                            if (_imagePath != null)
+                              TextButton.icon(
+                                onPressed: () {
+                                  setState(() {
+                                    _imagePath = null;
+                                  });
+                                },
+                                icon: const Icon(Icons.delete, color: Colors.red),
+                                label: const Text('حذف الصورة', style: TextStyle(color: Colors.red)),
+                              ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              ),
             ],
           ),
         ),

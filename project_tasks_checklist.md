@@ -90,7 +90,7 @@ MainScreen (الرئيسية)
 | -- | ------------------ | ------------------------------------------ | ------------------- | -- | --- | ----------------------------------------------------- | ------------------------- |
 | ✅ | تحميل بيانات المنتج | جلب بيانات المنتج من JSON وعرضها للتحرير   | 2025-07-05 12:15    | ✅ | ✅  | `FutureBuilder` + `TextEditingController`             | `feature/edit-product-load` |
 | ✅ | تعديل الحقول       | تعديل الاسم، المبلغ، التصنيف، الملاحظات    | 2025-07-05 12:20    | ✅ | ✅  | نفس مكونات AddProductScreen                           | `feature/edit-product-fields` |
-| ⬜️ | تحديث الصورة       | تغيير أو حذف صورة المنتج                   | -                   | ⬜️ | ⬜️  | `image_picker` + حذف الصورة القديمة                   | `feature/product-list-ui` |
+| ✅ | تحديث الصورة       | تغيير أو حذف صورة المنتج                   | 2025-07-05 12:25    | ✅ | ✅  | `image_picker` + حذف الصورة القديمة                   | `feature/edit-product-image` |
 | ⬜️ | حفظ التعديلات      | تحديث JSON وتخزين الصورة الجديدة           | -                   | ⬜️ | ⬜️  | `jsonEncode()` + `File.writeAsString()`               | `feature/json-storage`    |
 | ⬜️ | عرض رسالة          | Snackbar أو Alert بعد التعديل              | -                   | ⬜️ | ⬜️  | `ScaffoldMessenger`                                   | `feature/product-list-ui` |
 
