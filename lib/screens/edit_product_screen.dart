@@ -215,6 +215,29 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   );
                 },
               ),
+              const SizedBox(height: 24),
+              ElevatedButton(
+                onPressed: () async {
+                  final dir = await getApplicationDocumentsDirectory();
+                  final file = File('${dir.path}/products.json');
+                  if (await file.exists()) {
+                    final content = await file.readAsString();
+                    List<ProductModel> products = ProductModel.decodeList(content);
+                    if (widget.productIndex < products.length) {
+                      products[widget.productIndex] = ProductModel(
+                        name: _nameController.text.trim(),
+                        amount: num.tryParse(_amountController.text.trim()) ?? 0,
+                        category: _selectedCategory ?? '',
+                        date: _selectedDate ?? DateTime.now(),
+                        notes: _notesController.text.trim().isEmpty ? null : _notesController.text.trim(),
+                        imagePath: _imagePath,
+                      );
+                      await file.writeAsString(ProductModel.encodeList(products));
+                    }
+                  }
+                },
+                child: const Text('حفظ التعديلات'),
+              ),
             ],
           ),
         ),
