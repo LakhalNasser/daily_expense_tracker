@@ -13,11 +13,13 @@ class StatisticsScreen extends StatefulWidget {
 
 class _StatisticsScreenState extends State<StatisticsScreen> {
   late Future<Map<String, num>> _categoryTotalsFuture;
+  late Future<Map<DateTime, num>> _dailyTotalsFuture;
 
   @override
   void initState() {
     super.initState();
     _categoryTotalsFuture = _loadCategoryTotals();
+    _dailyTotalsFuture = _loadDailyTotals();
   }
 
   Future<Map<String, num>> _loadCategoryTotals() async {
@@ -30,6 +32,24 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
         final Map<String, num> totals = {};
         for (var p in products) {
           totals[p.category] = (totals[p.category] ?? 0) + p.amount;
+        }
+        return totals;
+      }
+    }
+    return {};
+  }
+
+  Future<Map<DateTime, num>> _loadDailyTotals() async {
+    final dir = await getApplicationDocumentsDirectory();
+    final file = File('${dir.path}/products.json');
+    if (await file.exists()) {
+      final content = await file.readAsString();
+      if (content.isNotEmpty) {
+        final products = ProductModel.decodeList(content);
+        final Map<DateTime, num> totals = {};
+        for (var p in products) {
+          final day = DateTime(p.date.year, p.date.month, p.date.day);
+          totals[day] = (totals[day] ?? 0) + p.amount;
         }
         return totals;
       }
@@ -85,6 +105,60 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                     Text('${e.key}: ${e.value} دج'),
                   ],
                 )),
+                const SizedBox(height: 32),
+                const Text('تغير المصاريف زمنيًا', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                const SizedBox(height: 16),
+                FutureBuilder<Map<DateTime, num>>(
+                  future: _dailyTotalsFuture,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                    final data = snapshot.data ?? {};
+                    if (data.isEmpty) {
+                      return const Text('لا توجد بيانات كافية للرسم البياني الخطي.');
+                    }
+                    final sortedKeys = data.keys.toList()..sort();
+                    final spots = <FlSpot>[];
+                    for (int i = 0; i < sortedKeys.length; i++) {
+                      spots.add(FlSpot(i.toDouble(), data[sortedKeys[i]]!.toDouble()));
+                    }
+                    return SizedBox(
+                      height: 200,
+                      child: LineChart(
+                        LineChartData(
+                          lineBarsData: [
+                            LineChartBarData(
+                              spots: spots,
+                              isCurved: true,
+                              color: Colors.blue,
+                              barWidth: 3,
+                              dotData: FlDotData(show: false),
+                            ),
+                          ],
+                          titlesData: FlTitlesData(
+                            bottomTitles: AxisTitles(
+                              sideTitles: SideTitles(
+                                showTitles: true,
+                                getTitlesWidget: (value, meta) {
+                                  int idx = value.toInt();
+                                  if (idx < 0 || idx >= sortedKeys.length) return const SizedBox();
+                                  final d = sortedKeys[idx];
+                                  return Text('${d.month}/${d.day}', style: const TextStyle(fontSize: 10));
+                                },
+                              ),
+                            ),
+                            leftTitles: AxisTitles(
+                              sideTitles: SideTitles(showTitles: true),
+                            ),
+                          ),
+                          gridData: FlGridData(show: true),
+                          borderData: FlBorderData(show: true),
+                        ),
+                      ),
+                    );
+                  },
+                ),
               ],
             ),
           );
