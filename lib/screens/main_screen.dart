@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../services/product_service.dart';
 
 /// MainScreen: واجهة التنقل الرئيسية بين الشاشات
 class MainScreen extends StatefulWidget {
@@ -20,7 +21,14 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
+    // تهيئة الخدمات عند بدء التطبيق
+    _initServices();
     // TODO: يمكن لاحقًا ربطها بـ provider أو shared_preferences لاستعادة آخر صفحة
+  }
+
+  Future<void> _initServices() async {
+    await ProductService().init();
+    // يمكن إضافة تهيئة خدمات أخرى هنا
   }
 
   // دالة تُعيد الشاشة المطلوبة وتُنشئها عند أول طلب فقط
