@@ -51,9 +51,16 @@ class _MainScreenState extends State<MainScreen> {
       appBar: AppBar(
         title: Text(_getTitle(_selectedIndex)),
       ),
-      body: IndexedStack(
-        index: _selectedIndex,
-        children: List.generate(4, (i) => _getScreen(i)),
+      body: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 350),
+        transitionBuilder: (child, animation) => FadeTransition(
+          opacity: animation,
+          child: child,
+        ),
+        child: Container(
+          key: ValueKey<int>(_selectedIndex),
+          child: _getScreen(_selectedIndex),
+        ),
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,

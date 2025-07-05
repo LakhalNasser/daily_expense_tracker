@@ -67,7 +67,7 @@ MainScreen (الرئيسية)
 | ✅ | زر الإضافة السريع   | FAB لإضافة منتج جديد مباشرة                       | 2025-07-05 10:48    | ✅ | ✅  | `FloatingActionButton` مع انتقال إلى AddProductScreen            | `feature/main-screen` |
 | ✅ | إدارة حالة التنقل  | حفظ الصفحة الحالية واستعادتها                     | 2025-07-05 10:51    | ✅ | ✅  | `provider` أو `bloc` لإدارة الحالة (حاليًا متغير محلي فقط)      | `feature/main-screen` |
 | ✅ | تحسين الأداء       | تحميل الشاشات بشكل كسول (lazy loading)            | 2025-07-05 11:10    | ✅ | ✅  | `IndexedStack` أو التحميل عند الطلب                              | `feature/lazy-loading` |
-| ⬜️ | انتقالات سلسة      | انتقالات متحركة بين الشاشات                       | -                   | ⬜️ | ⬜️  | `PageTransitionsBuilder` المناسب                                 | `feature/main-screen` |
+| ✅ | انتقالات سلسة      | انتقالات متحركة بين الشاشات                       | 2025-07-05 11:18    | ✅ | ✅  | `AnimatedSwitcher` مع `FadeTransition`                                 | `feature/animated-transitions` |
 | ⬜️ | تهيئة الخدمات      | تهيئة ProductService وباقي الخدمات عند بدء التطبيق | -                   | ⬜️ | ⬜️  | `initState` أو `didChangeDependencies`                           | `feature/main-screen` |
 
 ---
