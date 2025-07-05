@@ -53,11 +53,29 @@ class _ProductListScreenState extends State<ProductListScreen> {
                 margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 child: ListTile(
                   leading: product.imagePath != null
-                      ? Image.file(File(product.imagePath!), width: 48, height: 48, fit: BoxFit.cover)
+                      ? ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
+                          child: Image.file(
+                            File(product.imagePath!),
+                            width: 48,
+                            height: 48,
+                            fit: BoxFit.cover,
+                          ),
+                        )
                       : const Icon(Icons.image, size: 40, color: Colors.grey),
-                  title: Text(product.name),
-                  subtitle: Text('${product.amount} - ${product.category}'),
-                  onTap: () {}, // سيتم إضافة تفاصيل المنتج لاحقًا
+                  title: Text(product.name, style: const TextStyle(fontWeight: FontWeight.bold)),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('المبلغ: ${product.amount} دج', style: const TextStyle(color: Colors.green)),
+                      Text('التصنيف: ${product.category}'),
+                      if (product.notes != null && product.notes!.isNotEmpty)
+                        Text('ملاحظات: ${product.notes!}', style: const TextStyle(fontSize: 12, color: Colors.grey)),
+                      Text('التاريخ: ${product.date.year}-${product.date.month.toString().padLeft(2, '0')}-${product.date.day.toString().padLeft(2, '0')}', style: const TextStyle(fontSize: 12)),
+                    ],
+                  ),
+                  isThreeLine: true,
+                  onTap: () {},
                 ),
               );
             },
