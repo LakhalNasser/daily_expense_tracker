@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/product_model.dart';
 import 'dart:io';
 import 'edit_product_screen.dart';
+import '../services/delete_product_service.dart';
 
 class ProductDetailsScreen extends StatelessWidget {
   final ProductModel product;
@@ -9,6 +10,7 @@ class ProductDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final int? productIndex = ModalRoute.of(context)?.settings.arguments as int?;
     return Scaffold(
       appBar: AppBar(
         title: const Text('تفاصيل المنتج'),
@@ -21,11 +23,43 @@ class ProductDetailsScreen extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                   builder: (context) => EditProductScreen(
-                    productIndex: ModalRoute.of(context)?.settings.arguments as int? ?? 0,
+                    productIndex: productIndex ?? 0,
                   ),
-                  settings: RouteSettings(arguments: ModalRoute.of(context)?.settings.arguments),
+                  settings: RouteSettings(arguments: productIndex),
                 ),
               );
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.delete),
+            tooltip: 'حذف',
+            onPressed: () async {
+              final confirm = await showDialog<bool>(
+                context: context,
+                builder: (ctx) => AlertDialog(
+                  title: const Text('تأكيد الحذف'),
+                  content: const Text('هل أنت متأكد من حذف هذا المنتج؟'),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(ctx, false),
+                      child: const Text('إلغاء'),
+                    ),
+                    TextButton(
+                      onPressed: () => Navigator.pop(ctx, true),
+                      child: const Text('حذف', style: TextStyle(color: Colors.red)),
+                    ),
+                  ],
+                ),
+              );
+              if (confirm == true && productIndex != null) {
+                await deleteProductWithImage(
+                  context: context,
+                  productIndex: productIndex,
+                  onSuccess: () {
+                    Navigator.pop(context, true);
+                  },
+                );
+              }
             },
           ),
         ],
