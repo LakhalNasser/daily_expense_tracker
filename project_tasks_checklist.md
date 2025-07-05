@@ -66,7 +66,7 @@ MainScreen (الرئيسية)
 | ⬜️ | شريط التطبيق       | AppBar مع عنوان متغير حسب الصفحة الحالية          | -           | ⬜️ | ⬜️  | `AppBar` مع `title` ديناميكي                                     | `feature/main-screen` |
 | ⬜️ | زر الإضافة السريع   | FAB لإضافة منتج جديد مباشرة                       | -           | ⬜️ | ⬜️  | `FloatingActionButton` مع انتقال إلى AddProductScreen            | `feature/main-screen` |
 | ⬜️ | إدارة حالة التنقل  | حفظ الصفحة الحالية واستعادتها                     | -           | ⬜️ | ⬜️  | `provider` أو `bloc` لإدارة الحالة                              | `feature/main-screen` |
-| ⬜️ | تحسين الأداء       | تحميل الشاشات بشكل كسول (lazy loading)            | -           | ⬜️ | ⬜️  | `IndexedStack` أو التحميل عند الطلب                              | `feature/main-screen` |
+| ✅  | تحسين الأداء       | تحميل الشاشات بشكل كسول (lazy loading)            | 2024-06-09 22:10 (Africa/Algiers) | ⬜️ | ⬜️  | `IndexedStack` مع تحميل عند الطلب (Lazy Loading) | `feature/main-lazy-loading` |
 | ⬜️ | انتقالات سلسة      | انتقالات متحركة بين الشاشات                       | -           | ⬜️ | ⬜️  | `PageTransitionsBuilder` المناسب                                 | `feature/main-screen` |
 | ⬜️ | تهيئة الخدمات      | تهيئة ProductService وباقي الخدمات عند بدء التطبيق | -           | ⬜️ | ⬜️  | `initState` أو `didChangeDependencies`                           | `feature/main-screen` |
 
