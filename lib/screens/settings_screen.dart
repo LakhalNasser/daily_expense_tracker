@@ -5,7 +5,7 @@ import '../providers/currency_provider.dart';
 
 class SettingsScreen extends StatefulWidget {
   final void Function(bool)? onThemeChanged;
-  const SettingsScreen({Key? key, this.onThemeChanged}) : super(key: key);
+  const SettingsScreen({super.key, this.onThemeChanged});
 
   @override
   State<SettingsScreen> createState() => _SettingsScreenState();
@@ -58,7 +58,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
         _isLoading = false;
       });
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('تم تغيير العملة إلى: ${_currencyLabel(value)}')),
+        SnackBar(
+            content: Text('تم تغيير العملة إلى: ${_currencyLabel(value)}')),
       );
     }
   }

@@ -8,7 +8,7 @@ import 'settings_screen.dart';
 /// MainScreen: واجهة التنقل الرئيسية بين الشاشات
 class MainScreen extends StatefulWidget {
   final void Function(bool)? onThemeChanged;
-  const MainScreen({Key? key, this.onThemeChanged}) : super(key: key);
+  const MainScreen({super.key, this.onThemeChanged});
 
   @override
   State<MainScreen> createState() => _MainScreenState();
@@ -103,8 +103,8 @@ class _MainScreenState extends State<MainScreen> {
       floatingActionButton: _selectedIndex == 0
           ? FloatingActionButton(
               onPressed: () => _onItemTapped(1),
-              child: const Icon(Icons.add),
               tooltip: 'إضافة منتج جديد',
+              child: const Icon(Icons.add),
             )
           : null,
     );

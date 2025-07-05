@@ -8,7 +8,7 @@ import 'edit_product_screen.dart';
 import 'product_details_screen.dart';
 
 class ProductListScreen extends StatefulWidget {
-  const ProductListScreen({Key? key}) : super(key: key);
+  const ProductListScreen({super.key});
 
   @override
   State<ProductListScreen> createState() => _ProductListScreenState();
@@ -160,10 +160,11 @@ class _ProductListScreenState extends State<ProductListScreen> {
                       .toList();
                 }
                 if (_searchQuery.isNotEmpty) {
-                  products = products.where((p) =>
-                    p.name.contains(_searchQuery) ||
-                    p.category.contains(_searchQuery)
-                  ).toList();
+                  products = products
+                      .where((p) =>
+                          p.name.contains(_searchQuery) ||
+                          p.category.contains(_searchQuery))
+                      .toList();
                 }
                 if (products.isEmpty) {
                   return const Center(child: Text('لا توجد نتائج للفلترة.'));

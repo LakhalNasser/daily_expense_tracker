@@ -8,8 +8,7 @@ import '../providers/currency_provider.dart';
 
 class ProductDetailsScreen extends StatelessWidget {
   final ProductModel product;
-  const ProductDetailsScreen({Key? key, required this.product})
-      : super(key: key);
+  const ProductDetailsScreen({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {

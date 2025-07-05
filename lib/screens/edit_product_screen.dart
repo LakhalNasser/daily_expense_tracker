@@ -6,8 +6,7 @@ import 'package:image_picker/image_picker.dart';
 
 class EditProductScreen extends StatefulWidget {
   final int productIndex;
-  const EditProductScreen({Key? key, required this.productIndex})
-      : super(key: key);
+  const EditProductScreen({super.key, required this.productIndex});
 
   @override
   State<EditProductScreen> createState() => _EditProductScreenState();

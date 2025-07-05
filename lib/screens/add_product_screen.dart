@@ -5,7 +5,7 @@ import 'package:path_provider/path_provider.dart';
 import '../models/product_model.dart';
 
 class AddProductScreen extends StatefulWidget {
-  const AddProductScreen({Key? key}) : super(key: key);
+  const AddProductScreen({super.key});
 
   @override
   State<AddProductScreen> createState() => _AddProductScreenState();

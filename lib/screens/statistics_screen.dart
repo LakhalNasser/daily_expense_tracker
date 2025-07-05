@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 import '../providers/currency_provider.dart';
 
 class StatisticsScreen extends StatefulWidget {
-  const StatisticsScreen({Key? key}) : super(key: key);
+  const StatisticsScreen({super.key});
 
   @override
   State<StatisticsScreen> createState() => _StatisticsScreenState();
@@ -179,7 +179,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                                       isCurved: true,
                                       color: Colors.blue,
                                       barWidth: 3,
-                                      dotData: FlDotData(show: false),
+                                      dotData: const FlDotData(show: false),
                                     ),
                                   ],
                                   titlesData: FlTitlesData(
@@ -189,8 +189,9 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                                         getTitlesWidget: (value, meta) {
                                           int idx = value.toInt();
                                           if (idx < 0 ||
-                                              idx >= sortedKeys.length)
+                                              idx >= sortedKeys.length) {
                                             return const SizedBox();
+                                          }
                                           final d = sortedKeys[idx];
                                           return Text('${d.month}/${d.day}',
                                               style: const TextStyle(
@@ -198,11 +199,11 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                                         },
                                       ),
                                     ),
-                                    leftTitles: AxisTitles(
+                                    leftTitles: const AxisTitles(
                                       sideTitles: SideTitles(showTitles: true),
                                     ),
                                   ),
-                                  gridData: FlGridData(show: true),
+                                  gridData: const FlGridData(show: true),
                                   borderData: FlBorderData(show: true),
                                 ),
                               ),
