@@ -69,11 +69,80 @@ class _EditProductScreenState extends State<EditProductScreen> {
       appBar: AppBar(title: const Text('تعديل منتج')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            // ...حقول التعديل (سيتم استكمالها في المهام القادمة)...
-            Text('واجهة تعديل المنتج (تحت التطوير)')
-          ],
+        child: Form(
+          child: ListView(
+            children: [
+              TextFormField(
+                controller: _nameController,
+                decoration: const InputDecoration(
+                  labelText: 'اسم المنتج',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: 16),
+              TextFormField(
+                controller: _amountController,
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(
+                  labelText: 'المبلغ',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: 16),
+              DropdownButtonFormField<String>(
+                value: _selectedCategory,
+                items: _categories.map((cat) => DropdownMenuItem(
+                  value: cat,
+                  child: Text(cat),
+                )).toList(),
+                decoration: const InputDecoration(
+                  labelText: 'التصنيف',
+                  border: OutlineInputBorder(),
+                ),
+                onChanged: (val) => setState(() => _selectedCategory = val),
+              ),
+              const SizedBox(height: 16),
+              InkWell(
+                onTap: () async {
+                  final now = DateTime.now();
+                  final picked = await showDatePicker(
+                    context: context,
+                    initialDate: _selectedDate ?? now,
+                    firstDate: DateTime(now.year - 5),
+                    lastDate: DateTime(now.year + 1),
+                    locale: const Locale('ar'),
+                  );
+                  if (picked != null) {
+                    setState(() {
+                      _selectedDate = picked;
+                    });
+                  }
+                },
+                child: InputDecorator(
+                  decoration: const InputDecoration(
+                    labelText: 'التاريخ',
+                    border: OutlineInputBorder(),
+                  ),
+                  child: Text(
+                    _selectedDate == null
+                        ? 'اختر التاريخ'
+                        : '${_selectedDate!.year}-${_selectedDate!.month.toString().padLeft(2, '0')}-${_selectedDate!.day.toString().padLeft(2, '0')}',
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              TextFormField(
+                controller: _notesController,
+                decoration: const InputDecoration(
+                  labelText: 'ملاحظات',
+                  border: OutlineInputBorder(),
+                ),
+                maxLines: 2,
+              ),
+              const SizedBox(height: 24),
+              Text('واجهة تعديل المنتج (تحت التطوير)'),
+            ],
+          ),
         ),
       ),
     );
