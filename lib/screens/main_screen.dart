@@ -11,6 +11,12 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
 
+  @override
+  void initState() {
+    super.initState();
+    // TODO: يمكن لاحقًا ربطها بـ provider أو shared_preferences لاستعادة آخر صفحة
+  }
+
   // قائمة الشاشات (يتم استبدال الحاويات بالشاشات الفعلية لاحقًا)
   final List<Widget> _screens = [
     Center(child: Text('قائمة المنتجات')), // ProductListScreen
