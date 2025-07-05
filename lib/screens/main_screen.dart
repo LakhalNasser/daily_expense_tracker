@@ -3,6 +3,7 @@ import '../services/product_service.dart';
 import 'add_product_screen.dart';
 import 'product_list_screen.dart';
 import 'statistics_screen.dart';
+import 'settings_screen.dart';
 
 /// MainScreen: واجهة التنقل الرئيسية بين الشاشات
 class MainScreen extends StatefulWidget {
@@ -44,7 +45,7 @@ class _MainScreenState extends State<MainScreen> {
       case 2:
         return _statisticsScreen ??= const StatisticsScreen();
       case 3:
-        return _settingsScreen ??= Center(child: Text('الإعدادات'));
+        return _settingsScreen ??= const SettingsScreen();
       default:
         return Container();
     }
