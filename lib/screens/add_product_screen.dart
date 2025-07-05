@@ -73,7 +73,19 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   labelText: 'المبلغ',
                   border: OutlineInputBorder(),
                 ),
-                validator: (value) => value == null || value.isEmpty ? 'الرجاء إدخال المبلغ' : null,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'الرجاء إدخال المبلغ';
+                  }
+                  final num? amount = num.tryParse(value);
+                  if (amount == null) {
+                    return 'الرجاء إدخال رقم صالح';
+                  }
+                  if (amount <= 0) {
+                    return 'يجب أن يكون المبلغ أكبر من صفر';
+                  }
+                  return null;
+                },
               ),
               const SizedBox(height: 16),
               DropdownButtonFormField<String>(
