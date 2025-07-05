@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/product_model.dart';
 import 'dart:io';
+import 'edit_product_screen.dart';
 
 class ProductDetailsScreen extends StatelessWidget {
   final ProductModel product;
@@ -9,7 +10,26 @@ class ProductDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('تفاصيل المنتج')),
+      appBar: AppBar(
+        title: const Text('تفاصيل المنتج'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.edit),
+            tooltip: 'تعديل',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => EditProductScreen(
+                    productIndex: ModalRoute.of(context)?.settings.arguments as int? ?? 0,
+                  ),
+                  settings: RouteSettings(arguments: ModalRoute.of(context)?.settings.arguments),
+                ),
+              );
+            },
+          ),
+        ],
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Card(

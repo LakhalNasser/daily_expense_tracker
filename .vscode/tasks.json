@@ -1,0 +1,11 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "shell",
+			"label": "create feature branch for ProductDetailsScreen edit button",
+			"command": "git checkout -b feature/product-details-edit-btn",
+			"group": "build"
+		}
+	]
+}
