@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
 class AddProductScreen extends StatefulWidget {
   const AddProductScreen({Key? key}) : super(key: key);
@@ -14,6 +16,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
   final TextEditingController _notesController = TextEditingController();
   String? _selectedCategory;
   DateTime? _selectedDate;
+  File? _pickedImage;
+  final ImagePicker _picker = ImagePicker();
 
   final List<String> _categories = [
     'طعام',
@@ -43,6 +47,15 @@ class _AddProductScreenState extends State<AddProductScreen> {
     if (picked != null) {
       setState(() {
         _selectedDate = picked;
+      });
+    }
+  }
+
+  Future<void> _pickImage(ImageSource source) async {
+    final XFile? image = await _picker.pickImage(source: source, imageQuality: 75);
+    if (image != null) {
+      setState(() {
+        _pickedImage = File(image.path);
       });
     }
   }
@@ -126,6 +139,43 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 maxLines: 2,
               ),
               const SizedBox(height: 24),
+              // حقل الصورة
+              Row(
+                children: [
+                  _pickedImage != null
+                      ? ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
+                          child: Image.file(
+                            _pickedImage!,
+                            width: 80,
+                            height: 80,
+                            fit: BoxFit.cover,
+                          ),
+                        )
+                      : Container(
+                          width: 80,
+                          height: 80,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: const Icon(Icons.image, size: 40, color: Colors.grey),
+                        ),
+                  const SizedBox(width: 16),
+                  ElevatedButton.icon(
+                    onPressed: () => _pickImage(ImageSource.gallery),
+                    icon: const Icon(Icons.photo),
+                    label: const Text('من المعرض'),
+                  ),
+                  const SizedBox(width: 8),
+                  ElevatedButton.icon(
+                    onPressed: () => _pickImage(ImageSource.camera),
+                    icon: const Icon(Icons.camera_alt),
+                    label: const Text('من الكاميرا'),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
