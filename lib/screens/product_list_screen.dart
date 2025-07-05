@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../models/product_model.dart';
+import '../providers/currency_provider.dart';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import 'edit_product_screen.dart';
@@ -45,6 +47,8 @@ class _ProductListScreenState extends State<ProductListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final currency = context.watch<CurrencyProvider>().currency;
+
     return Scaffold(
       appBar: AppBar(title: const Text('قائمة المنتجات')),
       body: Column(
@@ -56,15 +60,18 @@ class _ProductListScreenState extends State<ProductListScreen> {
                 Expanded(
                   child: DropdownButtonFormField<String>(
                     value: _selectedFilterCategory,
-                    items: [null, ..._categories].map((cat) => DropdownMenuItem<String>(
-                      value: cat,
-                      child: Text(cat ?? 'كل التصنيفات'),
-                    )).toList(),
+                    items: [null, ..._categories]
+                        .map((cat) => DropdownMenuItem<String>(
+                              value: cat,
+                              child: Text(cat ?? 'كل التصنيفات'),
+                            ))
+                        .toList(),
                     decoration: const InputDecoration(
                       labelText: 'التصنيف',
                       border: OutlineInputBorder(),
                     ),
-                    onChanged: (val) => setState(() => _selectedFilterCategory = val),
+                    onChanged: (val) =>
+                        setState(() => _selectedFilterCategory = val),
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -98,7 +105,8 @@ class _ProductListScreenState extends State<ProductListScreen> {
                     ),
                   ),
                 ),
-                if (_selectedFilterCategory != null || _selectedFilterDate != null)
+                if (_selectedFilterCategory != null ||
+                    _selectedFilterDate != null)
                   IconButton(
                     icon: const Icon(Icons.clear),
                     onPressed: () => setState(() {
@@ -121,14 +129,17 @@ class _ProductListScreenState extends State<ProductListScreen> {
                 }
                 var products = snapshot.data!;
                 if (_selectedFilterCategory != null) {
-                  products = products.where((p) => p.category == _selectedFilterCategory).toList();
+                  products = products
+                      .where((p) => p.category == _selectedFilterCategory)
+                      .toList();
                 }
                 if (_selectedFilterDate != null) {
-                  products = products.where((p) =>
-                    p.date.year == _selectedFilterDate!.year &&
-                    p.date.month == _selectedFilterDate!.month &&
-                    p.date.day == _selectedFilterDate!.day
-                  ).toList();
+                  products = products
+                      .where((p) =>
+                          p.date.year == _selectedFilterDate!.year &&
+                          p.date.month == _selectedFilterDate!.month &&
+                          p.date.day == _selectedFilterDate!.day)
+                      .toList();
                 }
                 if (products.isEmpty) {
                   return const Center(child: Text('لا توجد نتائج للفلترة.'));
@@ -138,7 +149,8 @@ class _ProductListScreenState extends State<ProductListScreen> {
                   itemBuilder: (context, index) {
                     final product = products[index];
                     return Card(
-                      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 8),
                       child: ListTile(
                         leading: product.imagePath != null
                             ? ClipRRect(
@@ -150,16 +162,25 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                   fit: BoxFit.cover,
                                 ),
                               )
-                            : const Icon(Icons.image, size: 40, color: Colors.grey),
-                        title: Text(product.name, style: const TextStyle(fontWeight: FontWeight.bold)),
+                            : const Icon(Icons.image,
+                                size: 40, color: Colors.grey),
+                        title: Text(product.name,
+                            style:
+                                const TextStyle(fontWeight: FontWeight.bold)),
                         subtitle: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('المبلغ: ${product.amount} دج', style: const TextStyle(color: Colors.green)),
+                            Text('المبلغ: ${product.amount} $currency',
+                                style: const TextStyle(color: Colors.green)),
                             Text('التصنيف: ${product.category}'),
-                            if (product.notes != null && product.notes!.isNotEmpty)
-                              Text('ملاحظات: ${product.notes!}', style: const TextStyle(fontSize: 12, color: Colors.grey)),
-                            Text('التاريخ: ${product.date.year}-${product.date.month.toString().padLeft(2, '0')}-${product.date.day.toString().padLeft(2, '0')}', style: const TextStyle(fontSize: 12)),
+                            if (product.notes != null &&
+                                product.notes!.isNotEmpty)
+                              Text('ملاحظات: ${product.notes!}',
+                                  style: const TextStyle(
+                                      fontSize: 12, color: Colors.grey)),
+                            Text(
+                                'التاريخ: ${product.date.year}-${product.date.month.toString().padLeft(2, '0')}-${product.date.day.toString().padLeft(2, '0')}',
+                                style: const TextStyle(fontSize: 12)),
                           ],
                         ),
                         isThreeLine: true,
@@ -172,7 +193,8 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                 await Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => EditProductScreen(productIndex: index),
+                                    builder: (context) =>
+                                        EditProductScreen(productIndex: index),
                                   ),
                                 );
                                 setState(() {
@@ -187,36 +209,46 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                   context: context,
                                   builder: (ctx) => AlertDialog(
                                     title: const Text('تأكيد الحذف'),
-                                    content: const Text('هل أنت متأكد من حذف هذا المنتج؟'),
+                                    content: const Text(
+                                        'هل أنت متأكد من حذف هذا المنتج؟'),
                                     actions: [
                                       TextButton(
-                                        onPressed: () => Navigator.pop(ctx, false),
+                                        onPressed: () =>
+                                            Navigator.pop(ctx, false),
                                         child: const Text('إلغاء'),
                                       ),
                                       TextButton(
-                                        onPressed: () => Navigator.pop(ctx, true),
-                                        child: const Text('حذف', style: TextStyle(color: Colors.red)),
+                                        onPressed: () =>
+                                            Navigator.pop(ctx, true),
+                                        child: const Text('حذف',
+                                            style:
+                                                TextStyle(color: Colors.red)),
                                       ),
                                     ],
                                   ),
                                 );
                                 if (confirm == true) {
                                   // حذف المنتج من JSON وحذف الصورة إذا وجدت
-                                  final dir = await getApplicationDocumentsDirectory();
-                                  final file = File('${dir.path}/products.json');
+                                  final dir =
+                                      await getApplicationDocumentsDirectory();
+                                  final file =
+                                      File('${dir.path}/products.json');
                                   if (await file.exists()) {
                                     final content = await file.readAsString();
-                                    List<ProductModel> products = ProductModel.decodeList(content);
+                                    List<ProductModel> products =
+                                        ProductModel.decodeList(content);
                                     if (index < products.length) {
                                       final product = products[index];
                                       if (product.imagePath != null) {
-                                        final imgFile = File(product.imagePath!);
+                                        final imgFile =
+                                            File(product.imagePath!);
                                         if (await imgFile.exists()) {
                                           await imgFile.delete();
                                         }
                                       }
                                       products.removeAt(index);
-                                      await file.writeAsString(ProductModel.encodeList(products));
+                                      await file.writeAsString(
+                                          ProductModel.encodeList(products));
                                       setState(() {
                                         _productsFuture = _loadProducts();
                                       });
@@ -231,7 +263,8 @@ class _ProductListScreenState extends State<ProductListScreen> {
                           await Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => ProductDetailsScreen(product: product),
+                              builder: (context) =>
+                                  ProductDetailsScreen(product: product),
                               settings: RouteSettings(arguments: index),
                             ),
                           );

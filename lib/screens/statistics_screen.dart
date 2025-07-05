@@ -3,6 +3,8 @@ import 'package:fl_chart/fl_chart.dart';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import '../models/product_model.dart';
+import 'package:provider/provider.dart';
+import '../providers/currency_provider.dart';
 
 class StatisticsScreen extends StatefulWidget {
   const StatisticsScreen({Key? key}) : super(key: key);
@@ -73,6 +75,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final currency = context.watch<CurrencyProvider>().currency;
     return Scaffold(
       appBar: AppBar(title: const Text('إحصائيات المصاريف')),
       body: LayoutBuilder(
@@ -93,19 +96,29 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                     }
                     final data = snapshot.data ?? {};
                     if (data.isEmpty) {
-                      return const Center(child: Text('لا توجد بيانات لعرض الإحصائيات.'));
+                      return const Center(
+                          child: Text('لا توجد بيانات لعرض الإحصائيات.'));
                     }
-                    final sections = data.entries.map((e) => PieChartSectionData(
-                      value: e.value.toDouble(),
-                      title: e.key,
-                      color: Colors.primaries[data.keys.toList().indexOf(e.key) % Colors.primaries.length],
-                      radius: 60,
-                      titleStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
-                    )).toList();
+                    final sections = data.entries
+                        .map((e) => PieChartSectionData(
+                              value: e.value.toDouble(),
+                              title: e.key,
+                              color: Colors.primaries[
+                                  data.keys.toList().indexOf(e.key) %
+                                      Colors.primaries.length],
+                              radius: 60,
+                              titleStyle: const TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                            ))
+                        .toList();
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        const Text('توزيع المصاريف حسب التصنيف', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                        const Text('توزيع المصاريف حسب التصنيف',
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold)),
                         const SizedBox(height: 24),
                         SizedBox(
                           height: constraints.maxWidth < 400 ? 180 : 250,
@@ -113,38 +126,48 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                             PieChartData(
                               sections: sections,
                               sectionsSpace: 2,
-                              centerSpaceRadius: constraints.maxWidth < 400 ? 24 : 40,
+                              centerSpaceRadius:
+                                  constraints.maxWidth < 400 ? 24 : 40,
                             ),
                           ),
                         ),
                         const SizedBox(height: 24),
                         ...data.entries.map((e) => Row(
-                          children: [
-                            Container(
-                              width: 16, height: 16,
-                              color: Colors.primaries[data.keys.toList().indexOf(e.key) % Colors.primaries.length],
-                            ),
-                            const SizedBox(width: 8),
-                            Text('${e.key}: ${e.value} دج'),
-                          ],
-                        )),
+                              children: [
+                                Container(
+                                  width: 16,
+                                  height: 16,
+                                  color: Colors.primaries[
+                                      data.keys.toList().indexOf(e.key) %
+                                          Colors.primaries.length],
+                                ),
+                                const SizedBox(width: 8),
+                                Text('${e.key}: ${e.value} $currency'),
+                              ],
+                            )),
                         const SizedBox(height: 32),
-                        const Text('تغير المصاريف زمنيًا', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                        const Text('تغير المصاريف زمنيًا',
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold)),
                         const SizedBox(height: 16),
                         FutureBuilder<Map<DateTime, num>>(
                           future: _dailyTotalsFuture,
                           builder: (context, snapshot) {
-                            if (snapshot.connectionState == ConnectionState.waiting) {
-                              return const Center(child: CircularProgressIndicator());
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const Center(
+                                  child: CircularProgressIndicator());
                             }
                             final data = snapshot.data ?? {};
                             if (data.isEmpty) {
-                              return const Text('لا توجد بيانات كافية للرسم البياني الخطي.');
+                              return const Text(
+                                  'لا توجد بيانات كافية للرسم البياني الخطي.');
                             }
                             final sortedKeys = data.keys.toList()..sort();
                             final spots = <FlSpot>[];
                             for (int i = 0; i < sortedKeys.length; i++) {
-                              spots.add(FlSpot(i.toDouble(), data[sortedKeys[i]]!.toDouble()));
+                              spots.add(FlSpot(i.toDouble(),
+                                  data[sortedKeys[i]]!.toDouble()));
                             }
                             return SizedBox(
                               height: constraints.maxWidth < 400 ? 120 : 200,
@@ -165,9 +188,13 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                                         showTitles: true,
                                         getTitlesWidget: (value, meta) {
                                           int idx = value.toInt();
-                                          if (idx < 0 || idx >= sortedKeys.length) return const SizedBox();
+                                          if (idx < 0 ||
+                                              idx >= sortedKeys.length)
+                                            return const SizedBox();
                                           final d = sortedKeys[idx];
-                                          return Text('${d.month}/${d.day}', style: const TextStyle(fontSize: 10));
+                                          return Text('${d.month}/${d.day}',
+                                              style: const TextStyle(
+                                                  fontSize: 10));
                                         },
                                       ),
                                     ),
@@ -183,13 +210,17 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                           },
                         ),
                         const SizedBox(height: 32),
-                        const Text('الملخص', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                        const Text('الملخص',
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold)),
                         const SizedBox(height: 8),
                         FutureBuilder<List<ProductModel>>(
                           future: _allProductsFuture,
                           builder: (context, snapshot) {
-                            if (snapshot.connectionState == ConnectionState.waiting) {
-                              return const Center(child: CircularProgressIndicator());
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const Center(
+                                  child: CircularProgressIndicator());
                             }
                             final products = snapshot.data ?? [];
                             if (products.isEmpty) {
@@ -197,20 +228,23 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                             }
                             // مجموع يومي
                             final today = DateTime.now();
-                            final dailyTotal = products.where((p) =>
-                              p.date.year == today.year &&
-                              p.date.month == today.month &&
-                              p.date.day == today.day
-                            ).fold<num>(0, (sum, p) => sum + p.amount);
+                            final dailyTotal = products
+                                .where((p) =>
+                                    p.date.year == today.year &&
+                                    p.date.month == today.month &&
+                                    p.date.day == today.day)
+                                .fold<num>(0, (sum, p) => sum + p.amount);
                             // مجموع شهري
-                            final monthlyTotal = products.where((p) =>
-                              p.date.year == today.year &&
-                              p.date.month == today.month
-                            ).fold<num>(0, (sum, p) => sum + p.amount);
+                            final monthlyTotal = products
+                                .where((p) =>
+                                    p.date.year == today.year &&
+                                    p.date.month == today.month)
+                                .fold<num>(0, (sum, p) => sum + p.amount);
                             // أعلى تصنيف
                             final Map<String, num> categoryTotals = {};
                             for (var p in products) {
-                              categoryTotals[p.category] = (categoryTotals[p.category] ?? 0) + p.amount;
+                              categoryTotals[p.category] =
+                                  (categoryTotals[p.category] ?? 0) + p.amount;
                             }
                             String topCategory = '';
                             num topValue = 0;
@@ -223,9 +257,10 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                             return Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text('مجموع اليوم: $dailyTotal دج'),
-                                Text('مجموع الشهر: $monthlyTotal دج'),
-                                Text('أعلى تصنيف: $topCategory (${topValue.toStringAsFixed(2)} دج)'),
+                                Text('مجموع اليوم: $dailyTotal $currency'),
+                                Text('مجموع الشهر: $monthlyTotal $currency'),
+                                Text(
+                                    'أعلى تصنيف: $topCategory (${topValue.toStringAsFixed(2)} $currency)'),
                               ],
                             );
                           },

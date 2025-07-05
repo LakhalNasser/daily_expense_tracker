@@ -54,7 +54,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
   }
 
   Future<void> _pickImage(ImageSource source) async {
-    final XFile? image = await _picker.pickImage(source: source, imageQuality: 75);
+    final XFile? image =
+        await _picker.pickImage(source: source, imageQuality: 75);
     if (image != null) {
       setState(() {
         _pickedImage = File(image.path);
@@ -69,7 +70,9 @@ class _AddProductScreenState extends State<AddProductScreen> {
       amount: num.parse(_amountController.text.trim()),
       category: _selectedCategory!,
       date: _selectedDate ?? DateTime.now(),
-      notes: _notesController.text.trim().isEmpty ? null : _notesController.text.trim(),
+      notes: _notesController.text.trim().isEmpty
+          ? null
+          : _notesController.text.trim(),
       imagePath: _pickedImage?.path,
     );
     final dir = await getApplicationDocumentsDirectory();
@@ -101,7 +104,9 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   labelText: 'اسم المنتج',
                   border: OutlineInputBorder(),
                 ),
-                validator: (value) => value == null || value.isEmpty ? 'الرجاء إدخال اسم المنتج' : null,
+                validator: (value) => value == null || value.isEmpty
+                    ? 'الرجاء إدخال اسم المنتج'
+                    : null,
               ),
               const SizedBox(height: 16),
               TextFormField(
@@ -128,10 +133,12 @@ class _AddProductScreenState extends State<AddProductScreen> {
               const SizedBox(height: 16),
               DropdownButtonFormField<String>(
                 value: _selectedCategory,
-                items: _categories.map((cat) => DropdownMenuItem(
-                  value: cat,
-                  child: Text(cat),
-                )).toList(),
+                items: _categories
+                    .map((cat) => DropdownMenuItem(
+                          value: cat,
+                          child: Text(cat),
+                        ))
+                    .toList(),
                 decoration: const InputDecoration(
                   labelText: 'التصنيف',
                   border: OutlineInputBorder(),
@@ -187,7 +194,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                 border: Border.all(color: Colors.grey),
                                 borderRadius: BorderRadius.circular(8),
                               ),
-                              child: const Icon(Icons.image, size: 40, color: Colors.grey),
+                              child: const Icon(Icons.image,
+                                  size: 40, color: Colors.grey),
                             ),
                       const SizedBox(width: 16),
                       Expanded(

@@ -47,8 +47,8 @@ class _MainScreenState extends State<MainScreen> {
         return _statisticsScreen ??= const StatisticsScreen();
       case 3:
         return _settingsScreen ??= SettingsScreen(
-              onThemeChanged: widget.onThemeChanged,
-            );
+          onThemeChanged: widget.onThemeChanged,
+        );
       default:
         return Container();
     }

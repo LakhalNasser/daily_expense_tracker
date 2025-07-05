@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../models/product_model.dart';
 import 'dart:io';
 import 'edit_product_screen.dart';
 import '../services/delete_product_service.dart';
+import '../providers/currency_provider.dart';
 
 class ProductDetailsScreen extends StatelessWidget {
   final ProductModel product;
-  const ProductDetailsScreen({Key? key, required this.product}) : super(key: key);
+  const ProductDetailsScreen({Key? key, required this.product})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final int? productIndex = ModalRoute.of(context)?.settings.arguments as int?;
+    final currency = context.watch<CurrencyProvider>().currency;
+    final int? productIndex =
+        ModalRoute.of(context)?.settings.arguments as int?;
     return Scaffold(
       appBar: AppBar(
         title: const Text('تفاصيل المنتج'),
@@ -46,7 +51,8 @@ class ProductDetailsScreen extends StatelessWidget {
                     ),
                     TextButton(
                       onPressed: () => Navigator.pop(ctx, true),
-                      child: const Text('حذف', style: TextStyle(color: Colors.red)),
+                      child: const Text('حذف',
+                          style: TextStyle(color: Colors.red)),
                     ),
                   ],
                 ),
@@ -87,16 +93,23 @@ class ProductDetailsScreen extends StatelessWidget {
                       : const Icon(Icons.image, size: 100, color: Colors.grey),
                 ),
                 const SizedBox(height: 24),
-                Text('الاسم: ${product.name}', style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                Text('الاسم: ${product.name}',
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold)),
                 const SizedBox(height: 12),
-                Text('المبلغ: ${product.amount} دج', style: const TextStyle(fontSize: 18, color: Colors.green)),
+                Text('المبلغ: ${product.amount} $currency',
+                    style: const TextStyle(fontSize: 18, color: Colors.green)),
                 const SizedBox(height: 12),
-                Text('التصنيف: ${product.category}', style: const TextStyle(fontSize: 16)),
+                Text('التصنيف: ${product.category}',
+                    style: const TextStyle(fontSize: 16)),
                 const SizedBox(height: 12),
-                Text('التاريخ: ${product.date.year}-${product.date.month.toString().padLeft(2, '0')}-${product.date.day.toString().padLeft(2, '0')}', style: const TextStyle(fontSize: 16)),
+                Text(
+                    'التاريخ: ${product.date.year}-${product.date.month.toString().padLeft(2, '0')}-${product.date.day.toString().padLeft(2, '0')}',
+                    style: const TextStyle(fontSize: 16)),
                 if (product.notes != null && product.notes!.isNotEmpty) ...[
                   const SizedBox(height: 12),
-                  Text('ملاحظات: ${product.notes!}', style: const TextStyle(fontSize: 15, color: Colors.grey)),
+                  Text('ملاحظات: ${product.notes!}',
+                      style: const TextStyle(fontSize: 15, color: Colors.grey)),
                 ],
               ],
             ),

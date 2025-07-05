@@ -6,7 +6,8 @@ import 'package:image_picker/image_picker.dart';
 
 class EditProductScreen extends StatefulWidget {
   final int productIndex;
-  const EditProductScreen({Key? key, required this.productIndex}) : super(key: key);
+  const EditProductScreen({Key? key, required this.productIndex})
+      : super(key: key);
 
   @override
   State<EditProductScreen> createState() => _EditProductScreenState();
@@ -42,7 +43,8 @@ class _EditProductScreenState extends State<EditProductScreen> {
       final products = ProductModel.decodeList(content);
       final product = products[widget.productIndex];
       _nameController = TextEditingController(text: product.name);
-      _amountController = TextEditingController(text: product.amount.toString());
+      _amountController =
+          TextEditingController(text: product.amount.toString());
       _notesController = TextEditingController(text: product.notes ?? '');
       _selectedCategory = product.category;
       _selectedDate = product.date;
@@ -92,10 +94,12 @@ class _EditProductScreenState extends State<EditProductScreen> {
               const SizedBox(height: 16),
               DropdownButtonFormField<String>(
                 value: _selectedCategory,
-                items: _categories.map((cat) => DropdownMenuItem(
-                  value: cat,
-                  child: Text(cat),
-                )).toList(),
+                items: _categories
+                    .map((cat) => DropdownMenuItem(
+                          value: cat,
+                          child: Text(cat),
+                        ))
+                    .toList(),
                 decoration: const InputDecoration(
                   labelText: 'التصنيف',
                   border: OutlineInputBorder(),
@@ -164,7 +168,8 @@ class _EditProductScreenState extends State<EditProductScreen> {
                                 border: Border.all(color: Colors.grey),
                                 borderRadius: BorderRadius.circular(8),
                               ),
-                              child: const Icon(Icons.image, size: 40, color: Colors.grey),
+                              child: const Icon(Icons.image,
+                                  size: 40, color: Colors.grey),
                             ),
                       const SizedBox(width: 16),
                       Expanded(
@@ -174,7 +179,9 @@ class _EditProductScreenState extends State<EditProductScreen> {
                             ElevatedButton.icon(
                               onPressed: () async {
                                 final picker = ImagePicker();
-                                final image = await picker.pickImage(source: ImageSource.gallery, imageQuality: 75);
+                                final image = await picker.pickImage(
+                                    source: ImageSource.gallery,
+                                    imageQuality: 75);
                                 if (image != null) {
                                   setState(() {
                                     _imagePath = image.path;
@@ -188,7 +195,9 @@ class _EditProductScreenState extends State<EditProductScreen> {
                             ElevatedButton.icon(
                               onPressed: () async {
                                 final picker = ImagePicker();
-                                final image = await picker.pickImage(source: ImageSource.camera, imageQuality: 75);
+                                final image = await picker.pickImage(
+                                    source: ImageSource.camera,
+                                    imageQuality: 75);
                                 if (image != null) {
                                   setState(() {
                                     _imagePath = image.path;
@@ -205,8 +214,10 @@ class _EditProductScreenState extends State<EditProductScreen> {
                                     _imagePath = null;
                                   });
                                 },
-                                icon: const Icon(Icons.delete, color: Colors.red),
-                                label: const Text('حذف الصورة', style: TextStyle(color: Colors.red)),
+                                icon:
+                                    const Icon(Icons.delete, color: Colors.red),
+                                label: const Text('حذف الصورة',
+                                    style: TextStyle(color: Colors.red)),
                               ),
                           ],
                         ),
@@ -222,19 +233,25 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   final file = File('${dir.path}/products.json');
                   if (await file.exists()) {
                     final content = await file.readAsString();
-                    List<ProductModel> products = ProductModel.decodeList(content);
+                    List<ProductModel> products =
+                        ProductModel.decodeList(content);
                     if (widget.productIndex < products.length) {
                       products[widget.productIndex] = ProductModel(
                         name: _nameController.text.trim(),
-                        amount: num.tryParse(_amountController.text.trim()) ?? 0,
+                        amount:
+                            num.tryParse(_amountController.text.trim()) ?? 0,
                         category: _selectedCategory ?? '',
                         date: _selectedDate ?? DateTime.now(),
-                        notes: _notesController.text.trim().isEmpty ? null : _notesController.text.trim(),
+                        notes: _notesController.text.trim().isEmpty
+                            ? null
+                            : _notesController.text.trim(),
                         imagePath: _imagePath,
                       );
-                      await file.writeAsString(ProductModel.encodeList(products));
+                      await file
+                          .writeAsString(ProductModel.encodeList(products));
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('تم حفظ التعديلات بنجاح!')),
+                        const SnackBar(
+                            content: Text('تم حفظ التعديلات بنجاح!')),
                       );
                     }
                   }

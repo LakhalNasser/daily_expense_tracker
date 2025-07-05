@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/provider.dart';
+import '../providers/currency_provider.dart';
 
 class SettingsScreen extends StatefulWidget {
   final void Function(bool)? onThemeChanged;
@@ -12,6 +14,7 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
   bool isDarkMode = false;
   String currency = 'DZD';
+  bool _isLoading = true;
 
   @override
   void initState() {
@@ -24,6 +27,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     setState(() {
       isDarkMode = prefs.getBool('isDarkMode') ?? false;
       currency = prefs.getString('currency') ?? 'DZD';
+      _isLoading = false;
     });
   }
 
@@ -39,12 +43,36 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   Future<void> _changeCurrency(String? value) async {
-    if (value != null) {
+    if (value != null && value != currency) {
       setState(() {
         currency = value;
+        _isLoading = true;
       });
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('currency', value);
+      // تحديث العملة في provider
+      if (mounted) {
+        context.read<CurrencyProvider>().setCurrency(value);
+      }
+      setState(() {
+        _isLoading = false;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('تم تغيير العملة إلى: ${_currencyLabel(value)}')),
+      );
+    }
+  }
+
+  String _currencyLabel(String value) {
+    switch (value) {
+      case 'DZD':
+        return 'دينار جزائري';
+      case 'USD':
+        return 'دولار أمريكي';
+      case 'EUR':
+        return 'يورو';
+      default:
+        return value;
     }
   }
 
@@ -53,7 +81,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('تأكيد مسح البيانات'),
-        content: const Text('هل أنت متأكد من رغبتك في مسح جميع البيانات؟ لا يمكن التراجع عن هذا الإجراء.'),
+        content: const Text(
+            'هل أنت متأكد من رغبتك في مسح جميع البيانات؟ لا يمكن التراجع عن هذا الإجراء.'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
@@ -76,6 +105,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (_isLoading) {
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
     return Scaffold(
       appBar: AppBar(
         title: const Text('الإعدادات'),
@@ -88,11 +122,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
             trailing: DropdownButton<String>(
               value: currency,
               items: const [
-                DropdownMenuItem(value: 'DZD', child: Text('دينار جزائري')), 
+                DropdownMenuItem(value: 'DZD', child: Text('دينار جزائري')),
                 DropdownMenuItem(value: 'USD', child: Text('دولار أمريكي')),
                 DropdownMenuItem(value: 'EUR', child: Text('يورو')),
               ],
-              onChanged: _changeCurrency,
+              onChanged: _isLoading ? null : _changeCurrency,
             ),
           ),
           SwitchListTile(

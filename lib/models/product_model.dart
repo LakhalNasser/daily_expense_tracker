@@ -18,22 +18,22 @@ class ProductModel {
   });
 
   Map<String, dynamic> toJson() => {
-    'name': name,
-    'amount': amount,
-    'category': category,
-    'date': date.toIso8601String(),
-    'notes': notes,
-    'imagePath': imagePath,
-  };
+        'name': name,
+        'amount': amount,
+        'category': category,
+        'date': date.toIso8601String(),
+        'notes': notes,
+        'imagePath': imagePath,
+      };
 
   factory ProductModel.fromJson(Map<String, dynamic> json) => ProductModel(
-    name: json['name'],
-    amount: json['amount'],
-    category: json['category'],
-    date: DateTime.parse(json['date']),
-    notes: json['notes'],
-    imagePath: json['imagePath'],
-  );
+        name: json['name'],
+        amount: json['amount'],
+        category: json['category'],
+        date: DateTime.parse(json['date']),
+        notes: json['notes'],
+        imagePath: json['imagePath'],
+      );
 
   static String encodeList(List<ProductModel> products) =>
       jsonEncode(products.map((e) => e.toJson()).toList());
