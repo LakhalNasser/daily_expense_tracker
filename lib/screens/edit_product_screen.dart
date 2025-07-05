@@ -233,6 +233,9 @@ class _EditProductScreenState extends State<EditProductScreen> {
                         imagePath: _imagePath,
                       );
                       await file.writeAsString(ProductModel.encodeList(products));
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('تم حفظ التعديلات بنجاح!')),
+                      );
                     }
                   }
                 },
