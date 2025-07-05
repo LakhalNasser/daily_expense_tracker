@@ -18,6 +18,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
   late Future<List<ProductModel>> _productsFuture;
   String? _selectedFilterCategory;
   DateTime? _selectedFilterDate;
+  String _searchQuery = '';
 
   final List<String> _categories = [
     'طعام',
@@ -55,65 +56,82 @@ class _ProductListScreenState extends State<ProductListScreen> {
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: Row(
+            child: Column(
               children: [
-                Expanded(
-                  child: DropdownButtonFormField<String>(
-                    value: _selectedFilterCategory,
-                    items: [null, ..._categories]
-                        .map((cat) => DropdownMenuItem<String>(
-                              value: cat,
-                              child: Text(cat ?? 'كل التصنيفات'),
-                            ))
-                        .toList(),
-                    decoration: const InputDecoration(
-                      labelText: 'التصنيف',
-                      border: OutlineInputBorder(),
-                    ),
-                    onChanged: (val) =>
-                        setState(() => _selectedFilterCategory = val),
+                TextField(
+                  decoration: const InputDecoration(
+                    labelText: 'بحث عن منتج بالاسم أو التصنيف',
+                    border: OutlineInputBorder(),
+                    prefixIcon: Icon(Icons.search),
                   ),
+                  onChanged: (val) {
+                    setState(() {
+                      _searchQuery = val.trim();
+                    });
+                  },
                 ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: InkWell(
-                    onTap: () async {
-                      final now = DateTime.now();
-                      final picked = await showDatePicker(
-                        context: context,
-                        initialDate: _selectedFilterDate ?? now,
-                        firstDate: DateTime(now.year - 5),
-                        lastDate: DateTime(now.year + 1),
-                        locale: const Locale('ar'),
-                      );
-                      if (picked != null) {
-                        setState(() {
-                          _selectedFilterDate = picked;
-                        });
-                      }
-                    },
-                    child: InputDecorator(
-                      decoration: const InputDecoration(
-                        labelText: 'التاريخ',
-                        border: OutlineInputBorder(),
-                      ),
-                      child: Text(
-                        _selectedFilterDate == null
-                            ? 'كل التواريخ'
-                            : '${_selectedFilterDate!.year}-${_selectedFilterDate!.month.toString().padLeft(2, '0')}-${_selectedFilterDate!.day.toString().padLeft(2, '0')}',
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    Expanded(
+                      child: DropdownButtonFormField<String>(
+                        value: _selectedFilterCategory,
+                        items: [null, ..._categories]
+                            .map((cat) => DropdownMenuItem<String>(
+                                  value: cat,
+                                  child: Text(cat ?? 'كل التصنيفات'),
+                                ))
+                            .toList(),
+                        decoration: const InputDecoration(
+                          labelText: 'التصنيف',
+                          border: OutlineInputBorder(),
+                        ),
+                        onChanged: (val) =>
+                            setState(() => _selectedFilterCategory = val),
                       ),
                     ),
-                  ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: InkWell(
+                        onTap: () async {
+                          final now = DateTime.now();
+                          final picked = await showDatePicker(
+                            context: context,
+                            initialDate: _selectedFilterDate ?? now,
+                            firstDate: DateTime(now.year - 5),
+                            lastDate: DateTime(now.year + 1),
+                            locale: const Locale('ar'),
+                          );
+                          if (picked != null) {
+                            setState(() {
+                              _selectedFilterDate = picked;
+                            });
+                          }
+                        },
+                        child: InputDecorator(
+                          decoration: const InputDecoration(
+                            labelText: 'التاريخ',
+                            border: OutlineInputBorder(),
+                          ),
+                          child: Text(
+                            _selectedFilterDate == null
+                                ? 'كل التواريخ'
+                                : '${_selectedFilterDate!.year}-${_selectedFilterDate!.month.toString().padLeft(2, '0')}-${_selectedFilterDate!.day.toString().padLeft(2, '0')}',
+                          ),
+                        ),
+                      ),
+                    ),
+                    if (_selectedFilterCategory != null ||
+                        _selectedFilterDate != null)
+                      IconButton(
+                        icon: const Icon(Icons.clear),
+                        onPressed: () => setState(() {
+                          _selectedFilterCategory = null;
+                          _selectedFilterDate = null;
+                        }),
+                      ),
+                  ],
                 ),
-                if (_selectedFilterCategory != null ||
-                    _selectedFilterDate != null)
-                  IconButton(
-                    icon: const Icon(Icons.clear),
-                    onPressed: () => setState(() {
-                      _selectedFilterCategory = null;
-                      _selectedFilterDate = null;
-                    }),
-                  ),
               ],
             ),
           ),
@@ -140,6 +158,12 @@ class _ProductListScreenState extends State<ProductListScreen> {
                           p.date.month == _selectedFilterDate!.month &&
                           p.date.day == _selectedFilterDate!.day)
                       .toList();
+                }
+                if (_searchQuery.isNotEmpty) {
+                  products = products.where((p) =>
+                    p.name.contains(_searchQuery) ||
+                    p.category.contains(_searchQuery)
+                  ).toList();
                 }
                 if (products.isEmpty) {
                   return const Center(child: Text('لا توجد نتائج للفلترة.'));
