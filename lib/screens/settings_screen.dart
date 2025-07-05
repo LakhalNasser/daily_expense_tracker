@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsScreen extends StatefulWidget {
-  const SettingsScreen({Key? key}) : super(key: key);
+  final void Function(bool)? onThemeChanged;
+  const SettingsScreen({Key? key, this.onThemeChanged}) : super(key: key);
 
   @override
   State<SettingsScreen> createState() => _SettingsScreenState();
@@ -11,19 +13,38 @@ class _SettingsScreenState extends State<SettingsScreen> {
   bool isDarkMode = false;
   String currency = 'DZD';
 
-  void _toggleDarkMode(bool value) {
+  @override
+  void initState() {
+    super.initState();
+    _loadSettings();
+  }
+
+  Future<void> _loadSettings() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      isDarkMode = prefs.getBool('isDarkMode') ?? false;
+      currency = prefs.getString('currency') ?? 'DZD';
+    });
+  }
+
+  Future<void> _toggleDarkMode(bool value) async {
     setState(() {
       isDarkMode = value;
     });
-    // TODO: Apply dark mode to the app
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('isDarkMode', value);
+    if (widget.onThemeChanged != null) {
+      widget.onThemeChanged!(value);
+    }
   }
 
-  void _changeCurrency(String? value) {
+  Future<void> _changeCurrency(String? value) async {
     if (value != null) {
       setState(() {
         currency = value;
       });
-      // TODO: Save currency preference
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('currency', value);
     }
   }
 

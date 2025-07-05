@@ -7,7 +7,8 @@ import 'settings_screen.dart';
 
 /// MainScreen: واجهة التنقل الرئيسية بين الشاشات
 class MainScreen extends StatefulWidget {
-  const MainScreen({Key? key}) : super(key: key);
+  final void Function(bool)? onThemeChanged;
+  const MainScreen({Key? key, this.onThemeChanged}) : super(key: key);
 
   @override
   State<MainScreen> createState() => _MainScreenState();
@@ -45,7 +46,9 @@ class _MainScreenState extends State<MainScreen> {
       case 2:
         return _statisticsScreen ??= const StatisticsScreen();
       case 3:
-        return _settingsScreen ??= const SettingsScreen();
+        return _settingsScreen ??= SettingsScreen(
+              onThemeChanged: widget.onThemeChanged,
+            );
       default:
         return Container();
     }
