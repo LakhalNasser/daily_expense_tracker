@@ -14,12 +14,14 @@ class StatisticsScreen extends StatefulWidget {
 class _StatisticsScreenState extends State<StatisticsScreen> {
   late Future<Map<String, num>> _categoryTotalsFuture;
   late Future<Map<DateTime, num>> _dailyTotalsFuture;
+  late Future<List<ProductModel>> _allProductsFuture;
 
   @override
   void initState() {
     super.initState();
     _categoryTotalsFuture = _loadCategoryTotals();
     _dailyTotalsFuture = _loadDailyTotals();
+    _allProductsFuture = _loadAllProducts();
   }
 
   Future<Map<String, num>> _loadCategoryTotals() async {
@@ -55,6 +57,18 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
       }
     }
     return {};
+  }
+
+  Future<List<ProductModel>> _loadAllProducts() async {
+    final dir = await getApplicationDocumentsDirectory();
+    final file = File('${dir.path}/products.json');
+    if (await file.exists()) {
+      final content = await file.readAsString();
+      if (content.isNotEmpty) {
+        return ProductModel.decodeList(content);
+      }
+    }
+    return [];
   }
 
   @override
@@ -156,6 +170,54 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                           borderData: FlBorderData(show: true),
                         ),
                       ),
+                    );
+                  },
+                ),
+                const SizedBox(height: 32),
+                const Text('الملخص', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                const SizedBox(height: 8),
+                FutureBuilder<List<ProductModel>>(
+                  future: _allProductsFuture,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                    final products = snapshot.data ?? [];
+                    if (products.isEmpty) {
+                      return const Text('لا توجد بيانات كافية للملخص.');
+                    }
+                    // مجموع يومي
+                    final today = DateTime.now();
+                    final dailyTotal = products.where((p) =>
+                      p.date.year == today.year &&
+                      p.date.month == today.month &&
+                      p.date.day == today.day
+                    ).fold<num>(0, (sum, p) => sum + p.amount);
+                    // مجموع شهري
+                    final monthlyTotal = products.where((p) =>
+                      p.date.year == today.year &&
+                      p.date.month == today.month
+                    ).fold<num>(0, (sum, p) => sum + p.amount);
+                    // أعلى تصنيف
+                    final Map<String, num> categoryTotals = {};
+                    for (var p in products) {
+                      categoryTotals[p.category] = (categoryTotals[p.category] ?? 0) + p.amount;
+                    }
+                    String topCategory = '';
+                    num topValue = 0;
+                    categoryTotals.forEach((cat, val) {
+                      if (val > topValue) {
+                        topCategory = cat;
+                        topValue = val;
+                      }
+                    });
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('مجموع اليوم: $dailyTotal دج'),
+                        Text('مجموع الشهر: $monthlyTotal دج'),
+                        Text('أعلى تصنيف: $topCategory (${topValue.toStringAsFixed(2)} دج)'),
+                      ],
                     );
                   },
                 ),
