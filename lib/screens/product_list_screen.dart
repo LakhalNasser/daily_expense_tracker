@@ -161,6 +161,62 @@ class _ProductListScreenState extends State<ProductListScreen> {
                           ],
                         ),
                         isThreeLine: true,
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                              icon: const Icon(Icons.edit, color: Colors.blue),
+                              onPressed: () {
+                                // TODO: الانتقال إلى EditProductScreen مع index
+                              },
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.delete, color: Colors.red),
+                              onPressed: () async {
+                                final confirm = await showDialog<bool>(
+                                  context: context,
+                                  builder: (ctx) => AlertDialog(
+                                    title: const Text('تأكيد الحذف'),
+                                    content: const Text('هل أنت متأكد من حذف هذا المنتج؟'),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () => Navigator.pop(ctx, false),
+                                        child: const Text('إلغاء'),
+                                      ),
+                                      TextButton(
+                                        onPressed: () => Navigator.pop(ctx, true),
+                                        child: const Text('حذف', style: TextStyle(color: Colors.red)),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                                if (confirm == true) {
+                                  // حذف المنتج من JSON وحذف الصورة إذا وجدت
+                                  final dir = await getApplicationDocumentsDirectory();
+                                  final file = File('${dir.path}/products.json');
+                                  if (await file.exists()) {
+                                    final content = await file.readAsString();
+                                    List<ProductModel> products = ProductModel.decodeList(content);
+                                    if (index < products.length) {
+                                      final product = products[index];
+                                      if (product.imagePath != null) {
+                                        final imgFile = File(product.imagePath!);
+                                        if (await imgFile.exists()) {
+                                          await imgFile.delete();
+                                        }
+                                      }
+                                      products.removeAt(index);
+                                      await file.writeAsString(ProductModel.encodeList(products));
+                                      setState(() {
+                                        _productsFuture = _loadProducts();
+                                      });
+                                    }
+                                  }
+                                }
+                              },
+                            ),
+                          ],
+                        ),
                         onTap: () {},
                       ),
                     );
