@@ -1,3 +1,31 @@
+# شجرة واجهات التطبيق (App Screens Tree)
+
+```
+MainScreen (الرئيسية)
+│
+├── AddProductScreen (إضافة منتج)
+│
+├── ProductListScreen (قائمة المنتجات)
+│   ├── EditProductScreen (تعديل منتج)
+│   └── ProductDetailsScreen (تفاصيل المنتج) [اختياري]
+│
+├── StatisticsScreen (الإحصائيات)
+│
+└── SettingsScreen (الإعدادات)
+```
+
+- **MainScreen**: نقطة الدخول الرئيسية للتطبيق، منها يتم التنقل إلى باقي الواجهات.
+- **AddProductScreen**: لإضافة منتج جديد، يمكن الوصول إليها من MainScreen أو من ProductListScreen.
+- **ProductListScreen**: لعرض جميع المنتجات، منها يمكن تعديل أو حذف منتج أو عرض تفاصيله.
+- **EditProductScreen**: لتعديل منتج موجود (تفتح من ProductListScreen).
+- **ProductDetailsScreen**: لعرض تفاصيل منتج (اختياري، يمكن دمجها مع EditProductScreen).
+- **StatisticsScreen**: لعرض الرسوم البيانية والإحصائيات.
+- **SettingsScreen**: لضبط إعدادات التطبيق.
+
+> هذه الشجرة توضح العلاقات والتنقلات الأساسية بين الواجهات، وتساعد في فهم الترابط البنيوي للتطبيق.
+
+---
+
 # شروط تنفيذ المشروع
 
 1. دراسة المشروع بشكل مفصل.
