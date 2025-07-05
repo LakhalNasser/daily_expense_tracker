@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '../models/product_model.dart';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
+import 'edit_product_screen.dart';
+import 'product_details_screen.dart';
 
 class ProductListScreen extends StatefulWidget {
   const ProductListScreen({Key? key}) : super(key: key);
@@ -166,8 +168,16 @@ class _ProductListScreenState extends State<ProductListScreen> {
                           children: [
                             IconButton(
                               icon: const Icon(Icons.edit, color: Colors.blue),
-                              onPressed: () {
-                                // TODO: الانتقال إلى EditProductScreen مع index
+                              onPressed: () async {
+                                await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => EditProductScreen(productIndex: index),
+                                  ),
+                                );
+                                setState(() {
+                                  _productsFuture = _loadProducts();
+                                });
                               },
                             ),
                             IconButton(
@@ -217,7 +227,18 @@ class _ProductListScreenState extends State<ProductListScreen> {
                             ),
                           ],
                         ),
-                        onTap: () {},
+                        onTap: () async {
+                          await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ProductDetailsScreen(product: product),
+                              settings: RouteSettings(arguments: index),
+                            ),
+                          );
+                          setState(() {
+                            _productsFuture = _loadProducts();
+                          });
+                        },
                       ),
                     );
                   },

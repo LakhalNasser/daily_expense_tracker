@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../services/product_service.dart';
 import 'add_product_screen.dart';
+import 'product_list_screen.dart';
+import 'statistics_screen.dart';
 
 /// MainScreen: واجهة التنقل الرئيسية بين الشاشات
 class MainScreen extends StatefulWidget {
@@ -36,11 +38,11 @@ class _MainScreenState extends State<MainScreen> {
   Widget _getScreen(int index) {
     switch (index) {
       case 0:
-        return _productListScreen ??= Center(child: Text('قائمة المنتجات'));
+        return _productListScreen ??= const ProductListScreen();
       case 1:
         return _addProductScreen ??= const AddProductScreen();
       case 2:
-        return _statisticsScreen ??= Center(child: Text('الإحصائيات'));
+        return _statisticsScreen ??= const StatisticsScreen();
       case 3:
         return _settingsScreen ??= Center(child: Text('الإعدادات'));
       default:
