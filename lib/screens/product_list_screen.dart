@@ -187,176 +187,187 @@ class _ProductListScreenState extends State<ProductListScreen> {
                       itemCount: products.length,
                       itemBuilder: (context, index) {
                         final product = products[index];
-                        return Card(
-                          margin: EdgeInsets.symmetric(
-                              horizontal: cardPadding,
-                              vertical: cardPadding / 2),
-                          elevation: 8, // زيادة الظل
-                          shape: RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.circular(20), // حواف دائرية أكبر
-                          ),
-                          child: Padding(
-                            padding: EdgeInsets.all(
-                                isWide ? 20 : 12), // مساحة داخلية أكبر
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                FutureBuilder<bool>(
-                                  future: product.imagePath != null
-                                      ? File(product.imagePath!).exists()
-                                      : Future.value(false),
-                                  builder: (context, snapshot) {
-                                    if (snapshot.connectionState ==
-                                            ConnectionState.done &&
-                                        snapshot.data == true) {
-                                      return ClipRRect(
-                                        borderRadius: BorderRadius.circular(
-                                            16), // صورة بحواف دائرية أكبر
-                                        child: Image.file(
-                                          File(product.imagePath!),
-                                          width: imageSize + 24, // صورة أكبر
-                                          height: imageSize + 24,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      );
-                                    } else {
-                                      return Icon(Icons.image,
-                                          size: imageSize + 24,
-                                          color: Colors.grey);
-                                    }
-                                  },
-                                ),
-                                const SizedBox(width: 20),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(product.name,
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: fontSize +
-                                                  2)), // اسم أوضح وأكبر
-                                      const SizedBox(height: 6),
-                                      Text(
-                                          '${AppLocalizations.of(context).get('amount')}: ${product.amount} $currency',
-                                          style: TextStyle(
-                                              color: Colors.green,
-                                              fontSize: fontSize)),
-                                      Text(
-                                          '${AppLocalizations.of(context).get('category')}: ${product.category}',
-                                          style: TextStyle(fontSize: fontSize)),
-                                      if (product.notes != null &&
-                                          product.notes!.isNotEmpty)
-                                        Text(
-                                            '${AppLocalizations.of(context).get('notes')}: ${product.notes!}',
-                                            style: TextStyle(
-                                                fontSize: fontSize - 2,
-                                                color: Colors.grey)),
-                                      Text(
-                                          '${AppLocalizations.of(context).get('date')}: ${product.date.year}-${product.date.month.toString().padLeft(2, '0')}-${product.date.day.toString().padLeft(2, '0')}',
-                                          style: TextStyle(
-                                              fontSize: fontSize - 2)),
-                                    ],
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ProductDetailsScreen(
+                                    product: product),
+                                settings: RouteSettings(arguments: index),
+                              ),
+                            );
+                          },
+                          child: Card(
+                            margin: EdgeInsets.symmetric(
+                                horizontal: cardPadding,
+                                vertical: cardPadding / 2),
+                            elevation: 8,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.all(
+                                  isWide ? 20 : 12),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  FutureBuilder<bool>(
+                                    future: product.imagePath != null
+                                        ? File(product.imagePath!).exists()
+                                        : Future.value(false),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.connectionState ==
+                                              ConnectionState.done &&
+                                          snapshot.data == true) {
+                                        return ClipRRect(
+                                          borderRadius: BorderRadius.circular(
+                                              16),
+                                          child: Image.file(
+                                            File(product.imagePath!),
+                                            width: imageSize + 24,
+                                            height: imageSize + 24,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        );
+                                      } else {
+                                        return Icon(Icons.image,
+                                            size: imageSize + 24,
+                                            color: Colors.grey);
+                                      }
+                                    },
                                   ),
-                                ),
-                                Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    IconButton(
-                                      icon: const Icon(Icons.edit),
-                                      color: Colors.orange, // لون مميز للتعديل
-                                      tooltip: AppLocalizations.of(context)
-                                          .get('edit'),
-                                      onPressed: () async {
-                                        await Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                EditProductScreen(
-                                                    productIndex: index),
-                                          ),
-                                        );
-                                        setState(() {
-                                          _productsFuture = _loadProducts();
-                                        });
-                                      },
-                                      splashColor: Colors.orangeAccent,
-                                      highlightColor: Colors.orange.shade100,
+                                  const SizedBox(width: 20),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(product.name,
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: fontSize +
+                                                    2)),
+                                        const SizedBox(height: 6),
+                                        Text(
+                                            '${AppLocalizations.of(context).get('amount')}: ${product.amount} $currency',
+                                            style: TextStyle(
+                                                color: Colors.green,
+                                                fontSize: fontSize)),
+                                        Text(
+                                            '${AppLocalizations.of(context).get('category')}: ${product.category}',
+                                            style: TextStyle(fontSize: fontSize)),
+                                        if (product.notes != null &&
+                                            product.notes!.isNotEmpty)
+                                          Text(
+                                              '${AppLocalizations.of(context).get('notes')}: ${product.notes!}',
+                                              style: TextStyle(
+                                                  fontSize: fontSize - 2,
+                                                  color: Colors.grey)),
+                                        Text(
+                                            '${AppLocalizations.of(context).get('date')}: ${product.date.year}-${product.date.month.toString().padLeft(2, '0')}-${product.date.day.toString().padLeft(2, '0')}',
+                                            style: TextStyle(
+                                                fontSize: fontSize - 2)),
+                                      ],
                                     ),
-                                    IconButton(
-                                      icon: const Icon(Icons.delete),
-                                      color: Colors.red, // لون مميز للحذف
-                                      tooltip: AppLocalizations.of(context)
-                                          .get('delete'),
-                                      onPressed: () async {
-                                        final confirm = await showDialog<bool>(
-                                          context: context,
-                                          builder: (ctx) => AlertDialog(
-                                            title: Text(
-                                                AppLocalizations.of(context)
-                                                    .get('confirm_delete')),
-                                            content: Text(
-                                                AppLocalizations.of(context)
-                                                    .get('delete_message')),
-                                            actions: [
-                                              TextButton(
-                                                onPressed: () =>
-                                                    Navigator.pop(ctx, false),
-                                                child: Text(
-                                                    AppLocalizations.of(context)
-                                                        .get('cancel')),
-                                              ),
-                                              TextButton(
-                                                onPressed: () =>
-                                                    Navigator.pop(ctx, true),
-                                                child: Text(
-                                                    AppLocalizations.of(context)
-                                                        .get('delete'),
-                                                    style: const TextStyle(
-                                                        color: Colors.red)),
-                                              ),
-                                            ],
-                                          ),
-                                        );
-                                        if (confirm == true) {
-                                          // حذف المنتج من JSON وحذف الصورة إذا وجدت
-                                          final dir =
-                                              await getApplicationDocumentsDirectory();
-                                          final file =
-                                              File('${dir.path}/products.json');
-                                          if (await file.exists()) {
-                                            final content =
-                                                await file.readAsString();
-                                            List<ProductModel> products =
-                                                ProductModel.decodeList(
-                                                    content);
-                                            if (index < products.length) {
-                                              final product = products[index];
-                                              if (product.imagePath != null) {
-                                                final imgFile =
-                                                    File(product.imagePath!);
-                                                if (await imgFile.exists()) {
-                                                  await imgFile.delete();
+                                  ),
+                                  Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      IconButton(
+                                        icon: const Icon(Icons.edit),
+                                        color: Colors.orange,
+                                        tooltip: AppLocalizations.of(context)
+                                            .get('edit'),
+                                        onPressed: () async {
+                                          await Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  EditProductScreen(
+                                                      productIndex: index),
+                                            ),
+                                          );
+                                          setState(() {
+                                            _productsFuture = _loadProducts();
+                                          });
+                                        },
+                                        splashColor: Colors.orangeAccent,
+                                        highlightColor: Colors.orange.shade100,
+                                      ),
+                                      IconButton(
+                                        icon: const Icon(Icons.delete),
+                                        color: Colors.red,
+                                        tooltip: AppLocalizations.of(context)
+                                            .get('delete'),
+                                        onPressed: () async {
+                                          final confirm = await showDialog<bool>(
+                                            context: context,
+                                            builder: (ctx) => AlertDialog(
+                                              title: Text(
+                                                  AppLocalizations.of(context)
+                                                      .get('confirm_delete')),
+                                              content: Text(
+                                                  AppLocalizations.of(context)
+                                                      .get('delete_message')),
+                                              actions: [
+                                                TextButton(
+                                                  onPressed: () =>
+                                                      Navigator.pop(ctx, false),
+                                                  child: Text(
+                                                      AppLocalizations.of(context)
+                                                          .get('cancel')),
+                                                ),
+                                                TextButton(
+                                                  onPressed: () =>
+                                                      Navigator.pop(ctx, true),
+                                                  child: Text(
+                                                      AppLocalizations.of(context)
+                                                          .get('delete'),
+                                                      style: const TextStyle(
+                                                          color: Colors.red)),
+                                                ),
+                                              ],
+                                            ),
+                                          );
+                                          if (confirm == true) {
+                                            // حذف المنتج من JSON وحذف الصورة إذا وجدت
+                                            final dir =
+                                                await getApplicationDocumentsDirectory();
+                                            final file =
+                                                File('${dir.path}/products.json');
+                                            if (await file.exists()) {
+                                              final content =
+                                                  await file.readAsString();
+                                              List<ProductModel> products =
+                                                  ProductModel.decodeList(
+                                                      content);
+                                              if (index < products.length) {
+                                                final product = products[index];
+                                                if (product.imagePath != null) {
+                                                  final imgFile =
+                                                      File(product.imagePath!);
+                                                  if (await imgFile.exists()) {
+                                                    await imgFile.delete();
+                                                  }
                                                 }
+                                                products.removeAt(index);
+                                                await file.writeAsString(
+                                                    ProductModel.encodeList(
+                                                        products));
+                                                setState(() {
+                                                  _productsFuture =
+                                                      _loadProducts();
+                                                });
                                               }
-                                              products.removeAt(index);
-                                              await file.writeAsString(
-                                                  ProductModel.encodeList(
-                                                      products));
-                                              setState(() {
-                                                _productsFuture =
-                                                    _loadProducts();
-                                              });
                                             }
                                           }
-                                        }
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              ],
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         );

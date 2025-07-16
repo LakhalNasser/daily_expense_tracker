@@ -84,13 +84,36 @@ class ProductDetailsScreen extends StatelessWidget {
               children: [
                 Center(
                   child: product.imagePath != null
-                      ? ClipRRect(
-                          borderRadius: BorderRadius.circular(12),
-                          child: Image.file(
-                            File(product.imagePath!),
-                            width: 180,
-                            height: 180,
-                            fit: BoxFit.cover,
+                      ? GestureDetector(
+                          onTap: () {
+                            showDialog(
+                              context: context,
+                              builder: (ctx) => Dialog(
+                                child: InteractiveViewer(
+                                  panEnabled: true,
+                                  minScale: 1,
+                                  maxScale: 4,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(12),
+                                    child: Image.file(
+                                      File(product.imagePath!),
+                                      width: 350,
+                                      height: 350,
+                                      fit: BoxFit.contain,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(12),
+                            child: Image.file(
+                              File(product.imagePath!),
+                              width: 180,
+                              height: 180,
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         )
                       : const Icon(Icons.image, size: 100, color: Colors.grey),
