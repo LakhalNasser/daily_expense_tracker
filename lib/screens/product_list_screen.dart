@@ -191,8 +191,12 @@ class _ProductListScreenState extends State<ProductListScreen> {
                           margin: EdgeInsets.symmetric(
                               horizontal: cardPadding,
                               vertical: cardPadding / 2),
+                          elevation: 8, // زيادة الظل
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20), // حواف دائرية أكبر
+                          ),
                           child: Padding(
-                            padding: EdgeInsets.all(isWide ? 16 : 8),
+                            padding: EdgeInsets.all(isWide ? 20 : 12), // مساحة داخلية أكبر
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -205,51 +209,50 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                             ConnectionState.done &&
                                         snapshot.data == true) {
                                       return ClipRRect(
-                                        borderRadius: BorderRadius.circular(8),
+                                        borderRadius: BorderRadius.circular(16), // صورة بحواف دائرية أكبر
                                         child: Image.file(
                                           File(product.imagePath!),
-                                          width: imageSize,
-                                          height: imageSize,
+                                          width: imageSize + 24, // صورة أكبر
+                                          height: imageSize + 24,
                                           fit: BoxFit.cover,
                                         ),
                                       );
                                     } else {
                                       return Icon(Icons.image,
-                                          size: imageSize, color: Colors.grey);
+                                          size: imageSize + 24, color: Colors.grey);
                                     }
                                   },
                                 ),
-                                const SizedBox(width: 16),
+                                const SizedBox(width: 20),
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text(product.name,
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
-                                              fontSize: fontSize)),
-                                      const SizedBox(height: 4),
+                                              fontSize: fontSize + 2)), // اسم أوضح وأكبر
+                                      const SizedBox(height: 6),
                                       Text(
                                           '${AppLocalizations.of(context).get('amount')}: ${product.amount} $currency',
                                           style: TextStyle(
                                               color: Colors.green,
-                                              fontSize: fontSize - 2)),
+                                              fontSize: fontSize)),
                                       Text(
                                           '${AppLocalizations.of(context).get('category')}: ${product.category}',
                                           style: TextStyle(
-                                              fontSize: fontSize - 2)),
+                                              fontSize: fontSize)),
                                       if (product.notes != null &&
                                           product.notes!.isNotEmpty)
                                         Text(
                                             '${AppLocalizations.of(context).get('notes')}: ${product.notes!}',
                                             style: TextStyle(
-                                                fontSize: fontSize - 4,
+                                                fontSize: fontSize - 2,
                                                 color: Colors.grey)),
                                       Text(
                                           '${AppLocalizations.of(context).get('date')}: ${product.date.year}-${product.date.month.toString().padLeft(2, '0')}-${product.date.day.toString().padLeft(2, '0')}',
                                           style: TextStyle(
-                                              fontSize: fontSize - 4)),
+                                              fontSize: fontSize - 2)),
                                     ],
                                   ),
                                 ),
