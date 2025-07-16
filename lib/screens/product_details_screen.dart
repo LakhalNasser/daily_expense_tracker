@@ -42,8 +42,13 @@ class ProductDetailsScreen extends StatelessWidget {
               final confirm = await showDialog<bool>(
                 context: context,
                 builder: (ctx) => AlertDialog(
-                  title:
+                  title: Row(
+                    children: [
+                      const Icon(Icons.warning, color: Colors.red),
+                      const SizedBox(width: 8),
                       Text(AppLocalizations.of(context).get('confirm_delete')),
+                    ],
+                  ),
                   content:
                       Text(AppLocalizations.of(context).get('delete_message')),
                   actions: [
@@ -57,6 +62,8 @@ class ProductDetailsScreen extends StatelessWidget {
                           style: const TextStyle(color: Colors.red)),
                     ),
                   ],
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16)),
                 ),
               );
               if (confirm == true && productIndex != null) {

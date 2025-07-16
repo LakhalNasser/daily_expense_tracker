@@ -235,8 +235,25 @@ class _AddProductScreenState extends State<AddProductScreen> {
                     await _saveProduct();
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                          content: Text(AppLocalizations.of(context)
-                              .get('product_saved'))),
+                        content: Row(
+                          children: [
+                            const Icon(Icons.check_circle, color: Colors.green),
+                            const SizedBox(width: 8),
+                            Expanded(
+                                child: Text(AppLocalizations.of(context)
+                                    .get('product_saved'))),
+                          ],
+                        ),
+                        backgroundColor: Colors.green.shade50,
+                        behavior: SnackBarBehavior.floating,
+                        action: SnackBarAction(
+                          label: 'إغلاق',
+                          textColor: Colors.green,
+                          onPressed: () {},
+                        ),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12)),
+                      ),
                     );
                   }
                 },

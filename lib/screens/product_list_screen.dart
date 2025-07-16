@@ -192,8 +192,8 @@ class _ProductListScreenState extends State<ProductListScreen> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => ProductDetailsScreen(
-                                    product: product),
+                                builder: (context) =>
+                                    ProductDetailsScreen(product: product),
                                 settings: RouteSettings(arguments: index),
                               ),
                             );
@@ -207,8 +207,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                               borderRadius: BorderRadius.circular(20),
                             ),
                             child: Padding(
-                              padding: EdgeInsets.all(
-                                  isWide ? 20 : 12),
+                              padding: EdgeInsets.all(isWide ? 20 : 12),
                               child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -221,8 +220,8 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                               ConnectionState.done &&
                                           snapshot.data == true) {
                                         return ClipRRect(
-                                          borderRadius: BorderRadius.circular(
-                                              16),
+                                          borderRadius:
+                                              BorderRadius.circular(16),
                                           child: Image.file(
                                             File(product.imagePath!),
                                             width: imageSize + 24,
@@ -246,8 +245,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                         Text(product.name,
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
-                                                fontSize: fontSize +
-                                                    2)),
+                                                fontSize: fontSize + 2)),
                                         const SizedBox(height: 6),
                                         Text(
                                             '${AppLocalizations.of(context).get('amount')}: ${product.amount} $currency',
@@ -256,7 +254,8 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                                 fontSize: fontSize)),
                                         Text(
                                             '${AppLocalizations.of(context).get('category')}: ${product.category}',
-                                            style: TextStyle(fontSize: fontSize)),
+                                            style:
+                                                TextStyle(fontSize: fontSize)),
                                         if (product.notes != null &&
                                             product.notes!.isNotEmpty)
                                           Text(
@@ -301,12 +300,20 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                         tooltip: AppLocalizations.of(context)
                                             .get('delete'),
                                         onPressed: () async {
-                                          final confirm = await showDialog<bool>(
+                                          final confirm =
+                                              await showDialog<bool>(
                                             context: context,
                                             builder: (ctx) => AlertDialog(
-                                              title: Text(
-                                                  AppLocalizations.of(context)
+                                              title: Row(
+                                                children: [
+                                                  const Icon(Icons.warning,
+                                                      color: Colors.red),
+                                                  const SizedBox(width: 8),
+                                                  Text(AppLocalizations.of(
+                                                          context)
                                                       .get('confirm_delete')),
+                                                ],
+                                              ),
                                               content: Text(
                                                   AppLocalizations.of(context)
                                                       .get('delete_message')),
@@ -315,27 +322,33 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                                   onPressed: () =>
                                                       Navigator.pop(ctx, false),
                                                   child: Text(
-                                                      AppLocalizations.of(context)
+                                                      AppLocalizations.of(
+                                                              context)
                                                           .get('cancel')),
                                                 ),
                                                 TextButton(
                                                   onPressed: () =>
                                                       Navigator.pop(ctx, true),
                                                   child: Text(
-                                                      AppLocalizations.of(context)
+                                                      AppLocalizations.of(
+                                                              context)
                                                           .get('delete'),
                                                       style: const TextStyle(
                                                           color: Colors.red)),
                                                 ),
                                               ],
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          16)),
                                             ),
                                           );
                                           if (confirm == true) {
                                             // حذف المنتج من JSON وحذف الصورة إذا وجدت
                                             final dir =
                                                 await getApplicationDocumentsDirectory();
-                                            final file =
-                                                File('${dir.path}/products.json');
+                                            final file = File(
+                                                '${dir.path}/products.json');
                                             if (await file.exists()) {
                                               final content =
                                                   await file.readAsString();

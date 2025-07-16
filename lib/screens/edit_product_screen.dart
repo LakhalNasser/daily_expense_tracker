@@ -251,8 +251,24 @@ class _EditProductScreenState extends State<EditProductScreen> {
                       await file
                           .writeAsString(ProductModel.encodeList(products));
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                            content: Text('تم حفظ التعديلات بنجاح!')),
+                        SnackBar(
+                          content: Row(
+                            children: [
+                              const Icon(Icons.save, color: Colors.blue),
+                              const SizedBox(width: 8),
+                              Expanded(child: Text('تم حفظ التعديلات بنجاح!')),
+                            ],
+                          ),
+                          backgroundColor: Colors.blue.shade50,
+                          behavior: SnackBarBehavior.floating,
+                          action: SnackBarAction(
+                            label: 'إغلاق',
+                            textColor: Colors.blue,
+                            onPressed: () {},
+                          ),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12)),
+                        ),
                       );
                     }
                   }

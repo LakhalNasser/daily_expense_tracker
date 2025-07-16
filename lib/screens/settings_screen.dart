@@ -69,7 +69,24 @@ class _SettingsScreenState extends State<SettingsScreen> {
       });
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-            content: Text('تم تغيير العملة إلى: ${_currencyLabel(value)}')),
+          content: Row(
+            children: [
+              const Icon(Icons.check_circle, color: Colors.green),
+              const SizedBox(width: 8),
+              Expanded(
+                  child: Text('تم تغيير العملة إلى: ${_currencyLabel(value)}')),
+            ],
+          ),
+          backgroundColor: Colors.green.shade50,
+          behavior: SnackBarBehavior.floating,
+          action: SnackBarAction(
+            label: 'إغلاق',
+            textColor: Colors.green,
+            onPressed: () {},
+          ),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        ),
       );
     }
   }
@@ -103,9 +120,26 @@ class _SettingsScreenState extends State<SettingsScreen> {
       });
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-            content: Text(locale.languageCode == 'ar'
-                ? 'تم تغيير اللغة إلى العربية'
-                : 'Language changed to English')),
+          content: Row(
+            children: [
+              const Icon(Icons.language, color: Colors.blue),
+              const SizedBox(width: 8),
+              Expanded(
+                  child: Text(locale.languageCode == 'ar'
+                      ? 'تم تغيير اللغة إلى العربية'
+                      : 'Language changed to English')),
+            ],
+          ),
+          backgroundColor: Colors.blue.shade50,
+          behavior: SnackBarBehavior.floating,
+          action: SnackBarAction(
+            label: 'إغلاق',
+            textColor: Colors.blue,
+            onPressed: () {},
+          ),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        ),
       );
     }
   }
@@ -114,7 +148,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('تأكيد مسح البيانات'),
+        title: Row(
+          children: [
+            const Icon(Icons.warning, color: Colors.orange),
+            const SizedBox(width: 8),
+            const Text('تأكيد مسح البيانات'),
+          ],
+        ),
         content: const Text(
             'هل أنت متأكد من رغبتك في مسح جميع البيانات؟ لا يمكن التراجع عن هذا الإجراء.'),
         actions: [
@@ -124,15 +164,33 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('مسح'),
+            child: const Text('مسح', style: TextStyle(color: Colors.red)),
           ),
         ],
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       ),
     );
     if (confirm == true) {
       // TODO: Clear all app data (products, images, settings)
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('تم مسح جميع البيانات بنجاح')),
+        SnackBar(
+          content: Row(
+            children: [
+              const Icon(Icons.delete_forever, color: Colors.red),
+              const SizedBox(width: 8),
+              Expanded(child: Text('تم مسح جميع البيانات بنجاح')),
+            ],
+          ),
+          backgroundColor: Colors.red.shade50,
+          behavior: SnackBarBehavior.floating,
+          action: SnackBarAction(
+            label: 'إغلاق',
+            textColor: Colors.red,
+            onPressed: () {},
+          ),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        ),
       );
     }
   }
