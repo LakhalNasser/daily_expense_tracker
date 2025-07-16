@@ -265,8 +265,10 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     IconButton(
-                                      icon: const Icon(Icons.edit,
-                                          color: Colors.blue),
+                                      icon: const Icon(Icons.edit),
+                                      color: Colors.orange, // لون مميز للتعديل
+                                      tooltip: AppLocalizations.of(context)
+                                          .get('edit'),
                                       onPressed: () async {
                                         await Navigator.push(
                                           context,
@@ -280,10 +282,14 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                           _productsFuture = _loadProducts();
                                         });
                                       },
+                                      splashColor: Colors.orangeAccent,
+                                      highlightColor: Colors.orange.shade100,
                                     ),
                                     IconButton(
-                                      icon: const Icon(Icons.delete,
-                                          color: Colors.red),
+                                      icon: const Icon(Icons.delete),
+                                      color: Colors.red, // لون مميز للحذف
+                                      tooltip: AppLocalizations.of(context)
+                                          .get('delete'),
                                       onPressed: () async {
                                         final confirm = await showDialog<bool>(
                                           context: context,
