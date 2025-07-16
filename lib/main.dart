@@ -99,14 +99,28 @@ class _MyAppState extends State<MyApp> {
       ),
       darkTheme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
-            seedColor: Colors.deepPurple, brightness: Brightness.dark),
+          seedColor: Colors.deepPurple,
+          brightness: Brightness.dark,
+          primary: Color(0xFF311B92),
+          secondary: Color(0xFF9575CD),
+          background: Color(0xFF22223B),
+          surface: Color(0xFF2A2A40),
+          onPrimary: Colors.white,
+          onSecondary: Colors.white,
+          onBackground: Colors.white,
+          onSurface: Colors.white,
+          error: Colors.redAccent,
+          onError: Colors.white,
+        ),
         useMaterial3: true,
         fontFamily: 'Cairo',
         textTheme: const TextTheme(
-          headlineLarge: TextStyle(fontWeight: FontWeight.bold, fontSize: 28),
-          headlineMedium: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
-          bodyLarge: TextStyle(fontSize: 18),
-          bodyMedium: TextStyle(fontSize: 16),
+          headlineLarge: TextStyle(
+              fontWeight: FontWeight.bold, fontSize: 28, color: Colors.white),
+          headlineMedium: TextStyle(
+              fontWeight: FontWeight.bold, fontSize: 22, color: Colors.white),
+          bodyLarge: TextStyle(fontSize: 18, color: Colors.white),
+          bodyMedium: TextStyle(fontSize: 16, color: Colors.white),
         ),
         appBarTheme: const AppBarTheme(
           backgroundColor: Color(0xFF311B92),
@@ -115,12 +129,13 @@ class _MyAppState extends State<MyApp> {
         ),
         cardTheme: const CardTheme(
           elevation: 4,
+          color: Color(0xFF2A2A40),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(16)),
           ),
         ),
         buttonTheme: const ButtonThemeData(
-          buttonColor: Color(0xFF311B92),
+          buttonColor: Color(0xFF9575CD),
           textTheme: ButtonTextTheme.primary,
         ),
       ),
