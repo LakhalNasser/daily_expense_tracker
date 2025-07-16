@@ -3,6 +3,7 @@ import '../models/product_model.dart';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import 'package:image_picker/image_picker.dart';
+import '../l10n/app_localizations.dart';
 
 class EditProductScreen extends StatefulWidget {
   final int productIndex;
@@ -68,7 +69,8 @@ class _EditProductScreenState extends State<EditProductScreen> {
       );
     }
     return Scaffold(
-      appBar: AppBar(title: const Text('تعديل منتج')),
+      appBar:
+          AppBar(title: Text(AppLocalizations.of(context).get('edit_product'))),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -76,18 +78,18 @@ class _EditProductScreenState extends State<EditProductScreen> {
             children: [
               TextFormField(
                 controller: _nameController,
-                decoration: const InputDecoration(
-                  labelText: 'اسم المنتج',
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context).get('product_name'),
+                  border: const OutlineInputBorder(),
                 ),
               ),
               const SizedBox(height: 16),
               TextFormField(
                 controller: _amountController,
                 keyboardType: TextInputType.number,
-                decoration: const InputDecoration(
-                  labelText: 'المبلغ',
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context).get('amount'),
+                  border: const OutlineInputBorder(),
                 ),
               ),
               const SizedBox(height: 16),
@@ -99,9 +101,9 @@ class _EditProductScreenState extends State<EditProductScreen> {
                           child: Text(cat),
                         ))
                     .toList(),
-                decoration: const InputDecoration(
-                  labelText: 'التصنيف',
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context).get('category'),
+                  border: const OutlineInputBorder(),
                 ),
                 onChanged: (val) => setState(() => _selectedCategory = val),
               ),
@@ -123,13 +125,13 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   }
                 },
                 child: InputDecorator(
-                  decoration: const InputDecoration(
-                    labelText: 'التاريخ',
-                    border: OutlineInputBorder(),
+                  decoration: InputDecoration(
+                    labelText: AppLocalizations.of(context).get('date'),
+                    border: const OutlineInputBorder(),
                   ),
                   child: Text(
                     _selectedDate == null
-                        ? 'اختر التاريخ'
+                        ? AppLocalizations.of(context).get('select_date')
                         : '${_selectedDate!.year}-${_selectedDate!.month.toString().padLeft(2, '0')}-${_selectedDate!.day.toString().padLeft(2, '0')}',
                   ),
                 ),
@@ -137,9 +139,9 @@ class _EditProductScreenState extends State<EditProductScreen> {
               const SizedBox(height: 16),
               TextFormField(
                 controller: _notesController,
-                decoration: const InputDecoration(
-                  labelText: 'ملاحظات',
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context).get('notes'),
+                  border: const OutlineInputBorder(),
                 ),
                 maxLines: 2,
               ),

@@ -5,6 +5,7 @@ import 'package:path_provider/path_provider.dart';
 import '../models/product_model.dart';
 import 'package:provider/provider.dart';
 import '../providers/currency_provider.dart';
+import '../l10n/app_localizations.dart';
 
 class StatisticsScreen extends StatefulWidget {
   const StatisticsScreen({super.key});
@@ -77,7 +78,8 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
   Widget build(BuildContext context) {
     final currency = context.watch<CurrencyProvider>().currency;
     return Scaffold(
-      appBar: AppBar(title: const Text('إحصائيات المصاريف')),
+      appBar:
+          AppBar(title: Text(AppLocalizations.of(context).get('statistics'))),
       body: LayoutBuilder(
         builder: (context, constraints) {
           return SingleChildScrollView(
@@ -96,8 +98,9 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                     }
                     final data = snapshot.data ?? {};
                     if (data.isEmpty) {
-                      return const Center(
-                          child: Text('لا توجد بيانات لعرض الإحصائيات.'));
+                      return Center(
+                          child: Text(AppLocalizations.of(context)
+                              .get('no_stats_data')));
                     }
                     final sections = data.entries
                         .map((e) => PieChartSectionData(
@@ -146,9 +149,11 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                               ],
                             )),
                         const SizedBox(height: 32),
-                        const Text('تغير المصاريف زمنيًا',
-                            style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold)),
+                        Text(
+                          AppLocalizations.of(context).get('linechart_title'),
+                          style: const TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
                         const SizedBox(height: 16),
                         FutureBuilder<Map<DateTime, num>>(
                           future: _dailyTotalsFuture,
@@ -211,9 +216,11 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                           },
                         ),
                         const SizedBox(height: 32),
-                        const Text('الملخص',
-                            style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold)),
+                        Text(
+                          AppLocalizations.of(context).get('summary'),
+                          style: const TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
                         const SizedBox(height: 8),
                         FutureBuilder<List<ProductModel>>(
                           future: _allProductsFuture,

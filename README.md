@@ -1,16 +1,21 @@
-# daily_expense_tracker_app
+# Product Expense Tracker
 
-A new Flutter project.
+A simple Flutter app to track daily product expenses with images, categories, and statistics.
+
+## Features
+- Add, edit, and delete products with images
+- Filter and search products
+- View statistics (PieChart, LineChart, summary)
+- Multi-currency support
+- Light/Dark mode
+- **Multi-language support (Arabic/English)**
 
 ## Getting Started
+1. Run `flutter pub get`
+2. Run the app: `flutter run`
 
-This project is a starting point for a Flutter application.
+## Screenshots
+(Add your screenshots here)
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## License
+MIT

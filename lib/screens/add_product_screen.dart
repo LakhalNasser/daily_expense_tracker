@@ -3,6 +3,7 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import '../models/product_model.dart';
+import '../l10n/app_localizations.dart';
 
 class AddProductScreen extends StatefulWidget {
   const AddProductScreen({super.key});
@@ -91,7 +92,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('إضافة منتج')),
+      appBar:
+          AppBar(title: Text(AppLocalizations.of(context).get('add_product'))),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -100,32 +102,34 @@ class _AddProductScreenState extends State<AddProductScreen> {
             children: [
               TextFormField(
                 controller: _nameController,
-                decoration: const InputDecoration(
-                  labelText: 'اسم المنتج',
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context).get('product_name'),
+                  border: const OutlineInputBorder(),
                 ),
                 validator: (value) => value == null || value.isEmpty
-                    ? 'الرجاء إدخال اسم المنتج'
+                    ? AppLocalizations.of(context).get('enter_product_name')
                     : null,
               ),
               const SizedBox(height: 16),
               TextFormField(
                 controller: _amountController,
                 keyboardType: TextInputType.number,
-                decoration: const InputDecoration(
-                  labelText: 'المبلغ',
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context).get('amount'),
+                  border: const OutlineInputBorder(),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'الرجاء إدخال المبلغ';
+                    return AppLocalizations.of(context).get('enter_amount');
                   }
                   final num? amount = num.tryParse(value);
                   if (amount == null) {
-                    return 'الرجاء إدخال رقم صالح';
+                    return AppLocalizations.of(context)
+                        .get('enter_valid_number');
                   }
                   if (amount <= 0) {
-                    return 'يجب أن يكون المبلغ أكبر من صفر';
+                    return AppLocalizations.of(context)
+                        .get('amount_greater_than_zero');
                   }
                   return null;
                 },
@@ -139,24 +143,26 @@ class _AddProductScreenState extends State<AddProductScreen> {
                           child: Text(cat),
                         ))
                     .toList(),
-                decoration: const InputDecoration(
-                  labelText: 'التصنيف',
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context).get('category'),
+                  border: const OutlineInputBorder(),
                 ),
                 onChanged: (val) => setState(() => _selectedCategory = val),
-                validator: (value) => value == null ? 'اختر تصنيفًا' : null,
+                validator: (value) => value == null
+                    ? AppLocalizations.of(context).get('select_category')
+                    : null,
               ),
               const SizedBox(height: 16),
               InkWell(
                 onTap: _pickDate,
                 child: InputDecorator(
-                  decoration: const InputDecoration(
-                    labelText: 'التاريخ',
-                    border: OutlineInputBorder(),
+                  decoration: InputDecoration(
+                    labelText: AppLocalizations.of(context).get('date'),
+                    border: const OutlineInputBorder(),
                   ),
                   child: Text(
                     _selectedDate == null
-                        ? 'اختر التاريخ'
+                        ? AppLocalizations.of(context).get('select_date')
                         : '${_selectedDate!.year}-${_selectedDate!.month.toString().padLeft(2, '0')}-${_selectedDate!.day.toString().padLeft(2, '0')}',
                   ),
                 ),
@@ -164,9 +170,9 @@ class _AddProductScreenState extends State<AddProductScreen> {
               const SizedBox(height: 16),
               TextFormField(
                 controller: _notesController,
-                decoration: const InputDecoration(
-                  labelText: 'ملاحظات',
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context).get('notes'),
+                  border: const OutlineInputBorder(),
                 ),
                 maxLines: 2,
               ),
@@ -205,13 +211,15 @@ class _AddProductScreenState extends State<AddProductScreen> {
                             ElevatedButton.icon(
                               onPressed: () => _pickImage(ImageSource.gallery),
                               icon: const Icon(Icons.photo),
-                              label: const Text('من المعرض'),
+                              label: Text(AppLocalizations.of(context)
+                                  .get('from_gallery')),
                             ),
                             const SizedBox(height: 8),
                             ElevatedButton.icon(
                               onPressed: () => _pickImage(ImageSource.camera),
                               icon: const Icon(Icons.camera_alt),
-                              label: const Text('من الكاميرا'),
+                              label: Text(AppLocalizations.of(context)
+                                  .get('from_camera')),
                             ),
                           ],
                         ),
@@ -226,11 +234,13 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   if (_formKey.currentState!.validate()) {
                     await _saveProduct();
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('تم حفظ المنتج بنجاح!')),
+                      SnackBar(
+                          content: Text(AppLocalizations.of(context)
+                              .get('product_saved'))),
                     );
                   }
                 },
-                child: const Text('حفظ'),
+                child: Text(AppLocalizations.of(context).get('save')),
               ),
             ],
           ),

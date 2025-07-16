@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../providers/currency_provider.dart';
 
 class SettingsScreen extends StatefulWidget {
   final void Function(bool)? onThemeChanged;
-  const SettingsScreen({super.key, this.onThemeChanged});
+  final Locale currentLocale;
+  final void Function(Locale)? onLocaleChanged;
+  const SettingsScreen(
+      {super.key,
+      this.onThemeChanged,
+      this.onLocaleChanged,
+      required this.currentLocale});
 
   @override
   State<SettingsScreen> createState() => _SettingsScreenState();
@@ -15,10 +21,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
   bool isDarkMode = false;
   String currency = 'DZD';
   bool _isLoading = true;
+  Locale _currentLocale = const Locale('ar');
 
   @override
   void initState() {
     super.initState();
+    _currentLocale = widget.currentLocale;
     _loadSettings();
   }
 
@@ -27,6 +35,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     setState(() {
       isDarkMode = prefs.getBool('isDarkMode') ?? false;
       currency = prefs.getString('currency') ?? 'DZD';
+      _currentLocale = Locale(prefs.getString('locale') ?? 'ar');
       _isLoading = false;
     });
   }
@@ -52,7 +61,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
       await prefs.setString('currency', value);
       // تحديث العملة في provider
       if (mounted) {
-        context.read<CurrencyProvider>().setCurrency(value);
+        Provider.of<CurrencyProvider>(context, listen: false)
+            .setCurrency(value);
       }
       setState(() {
         _isLoading = false;
@@ -74,6 +84,29 @@ class _SettingsScreenState extends State<SettingsScreen> {
         return 'يورو';
       default:
         return value;
+    }
+  }
+
+  Future<void> _changeLanguage(Locale? locale) async {
+    if (locale != null && locale != _currentLocale) {
+      setState(() {
+        _currentLocale = locale;
+        _isLoading = true;
+      });
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('locale', locale.languageCode);
+      if (widget.onLocaleChanged != null) {
+        widget.onLocaleChanged!(locale);
+      }
+      setState(() {
+        _isLoading = false;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            content: Text(locale.languageCode == 'ar'
+                ? 'تم تغيير اللغة إلى العربية'
+                : 'Language changed to English')),
+      );
     }
   }
 
@@ -134,6 +167,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
             title: const Text('الوضع الليلي'),
             value: isDarkMode,
             onChanged: _toggleDarkMode,
+          ),
+          ListTile(
+            title: Text('اللغة'),
+            trailing: DropdownButton<Locale>(
+              value: _currentLocale,
+              items: const [
+                DropdownMenuItem(child: Text('العربية'), value: Locale('ar')),
+                DropdownMenuItem(child: Text('English'), value: Locale('en')),
+              ],
+              onChanged: _isLoading ? null : _changeLanguage,
+            ),
           ),
           const SizedBox(height: 24),
           ElevatedButton.icon(

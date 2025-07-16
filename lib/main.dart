@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'providers/currency_provider.dart';
 import 'screens/main_screen.dart';
+import 'l10n/app_localizations.dart';
 
 void main() {
   runApp(
@@ -25,11 +26,13 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   bool _isDarkMode = false;
+  Locale _currentLocale = const Locale('ar');
 
   @override
   void initState() {
     super.initState();
     _loadTheme();
+    _loadLocale();
   }
 
   Future<void> _loadTheme() async {
@@ -47,10 +50,27 @@ class _MyAppState extends State<MyApp> {
     await prefs.setBool('isDarkMode', value);
   }
 
+  Future<void> _loadLocale() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _currentLocale = Locale(prefs.getString('locale') ?? 'ar');
+    });
+  }
+
+  void _changeLocale(Locale locale) async {
+    setState(() {
+      _currentLocale = locale;
+    });
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('locale', locale.languageCode);
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Product Expense Tracker',
+      title: _currentLocale.languageCode == 'ar'
+          ? 'تتبع مصاريف المنتجات'
+          : 'Product Expense Tracker',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
@@ -65,14 +85,17 @@ class _MyAppState extends State<MyApp> {
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
+        AppLocalizationsDelegate(),
       ],
       supportedLocales: const [
         Locale('ar'),
         Locale('en'),
       ],
-      locale: const Locale('ar'),
+      locale: _currentLocale,
       home: MainScreen(
         onThemeChanged: _toggleTheme,
+        onLocaleChanged: _changeLocale,
+        currentLocale: _currentLocale,
       ),
     );
   }

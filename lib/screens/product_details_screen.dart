@@ -5,6 +5,7 @@ import 'dart:io';
 import 'edit_product_screen.dart';
 import '../services/delete_product_service.dart';
 import '../providers/currency_provider.dart';
+import '../l10n/app_localizations.dart';
 
 class ProductDetailsScreen extends StatelessWidget {
   final ProductModel product;
@@ -17,11 +18,11 @@ class ProductDetailsScreen extends StatelessWidget {
         ModalRoute.of(context)?.settings.arguments as int?;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('تفاصيل المنتج'),
+        title: Text(AppLocalizations.of(context).get('product_details')),
         actions: [
           IconButton(
             icon: const Icon(Icons.edit),
-            tooltip: 'تعديل',
+            tooltip: AppLocalizations.of(context).get('edit'),
             onPressed: () {
               Navigator.push(
                 context,
@@ -36,27 +37,30 @@ class ProductDetailsScreen extends StatelessWidget {
           ),
           IconButton(
             icon: const Icon(Icons.delete),
-            tooltip: 'حذف',
+            tooltip: AppLocalizations.of(context).get('delete'),
             onPressed: () async {
               final confirm = await showDialog<bool>(
                 context: context,
                 builder: (ctx) => AlertDialog(
-                  title: const Text('تأكيد الحذف'),
-                  content: const Text('هل أنت متأكد من حذف هذا المنتج؟'),
+                  title:
+                      Text(AppLocalizations.of(context).get('confirm_delete')),
+                  content:
+                      Text(AppLocalizations.of(context).get('delete_message')),
                   actions: [
                     TextButton(
                       onPressed: () => Navigator.pop(ctx, false),
-                      child: const Text('إلغاء'),
+                      child: Text(AppLocalizations.of(context).get('cancel')),
                     ),
                     TextButton(
                       onPressed: () => Navigator.pop(ctx, true),
-                      child: const Text('حذف',
-                          style: TextStyle(color: Colors.red)),
+                      child: Text(AppLocalizations.of(context).get('delete'),
+                          style: const TextStyle(color: Colors.red)),
                     ),
                   ],
                 ),
               );
               if (confirm == true && productIndex != null) {
+                if (!context.mounted) return;
                 await deleteProductWithImage(
                   context: context,
                   productIndex: productIndex,
@@ -92,22 +96,26 @@ class ProductDetailsScreen extends StatelessWidget {
                       : const Icon(Icons.image, size: 100, color: Colors.grey),
                 ),
                 const SizedBox(height: 24),
-                Text('الاسم: ${product.name}',
+                Text(
+                    '${AppLocalizations.of(context).get('product_name')}: ${product.name}',
                     style: const TextStyle(
                         fontSize: 20, fontWeight: FontWeight.bold)),
                 const SizedBox(height: 12),
-                Text('المبلغ: ${product.amount} $currency',
+                Text(
+                    '${AppLocalizations.of(context).get('amount')}: ${product.amount} $currency',
                     style: const TextStyle(fontSize: 18, color: Colors.green)),
                 const SizedBox(height: 12),
-                Text('التصنيف: ${product.category}',
+                Text(
+                    '${AppLocalizations.of(context).get('category')}: ${product.category}',
                     style: const TextStyle(fontSize: 16)),
                 const SizedBox(height: 12),
                 Text(
-                    'التاريخ: ${product.date.year}-${product.date.month.toString().padLeft(2, '0')}-${product.date.day.toString().padLeft(2, '0')}',
+                    '${AppLocalizations.of(context).get('date')}: ${product.date.year}-${product.date.month.toString().padLeft(2, '0')}-${product.date.day.toString().padLeft(2, '0')}',
                     style: const TextStyle(fontSize: 16)),
                 if (product.notes != null && product.notes!.isNotEmpty) ...[
                   const SizedBox(height: 12),
-                  Text('ملاحظات: ${product.notes!}',
+                  Text(
+                      '${AppLocalizations.of(context).get('notes')}: ${product.notes!}',
                       style: const TextStyle(fontSize: 15, color: Colors.grey)),
                 ],
               ],

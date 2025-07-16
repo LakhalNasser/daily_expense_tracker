@@ -4,11 +4,18 @@ import 'add_product_screen.dart';
 import 'product_list_screen.dart';
 import 'statistics_screen.dart';
 import 'settings_screen.dart';
+import '../l10n/app_localizations.dart';
 
 /// MainScreen: واجهة التنقل الرئيسية بين الشاشات
 class MainScreen extends StatefulWidget {
   final void Function(bool)? onThemeChanged;
-  const MainScreen({super.key, this.onThemeChanged});
+  final Locale currentLocale;
+  final void Function(Locale)? onLocaleChanged;
+  const MainScreen(
+      {super.key,
+      this.onThemeChanged,
+      this.onLocaleChanged,
+      required this.currentLocale});
 
   @override
   State<MainScreen> createState() => _MainScreenState();
@@ -48,6 +55,8 @@ class _MainScreenState extends State<MainScreen> {
       case 3:
         return _settingsScreen ??= SettingsScreen(
           onThemeChanged: widget.onThemeChanged,
+          onLocaleChanged: widget.onLocaleChanged,
+          currentLocale: widget.currentLocale,
         );
       default:
         return Container();
@@ -80,22 +89,22 @@ class _MainScreenState extends State<MainScreen> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
-        items: const [
+        items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.list),
-            label: 'المنتجات',
+            icon: const Icon(Icons.list),
+            label: AppLocalizations.of(context).get('products'),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.add_box),
-            label: 'إضافة',
+            icon: const Icon(Icons.add_box),
+            label: AppLocalizations.of(context).get('add'),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.pie_chart),
-            label: 'الإحصائيات',
+            icon: const Icon(Icons.pie_chart),
+            label: AppLocalizations.of(context).get('statistics'),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'الإعدادات',
+            icon: const Icon(Icons.settings),
+            label: AppLocalizations.of(context).get('settings'),
           ),
         ],
         type: BottomNavigationBarType.fixed,
@@ -111,15 +120,16 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   String _getTitle(int index) {
+    final l10n = AppLocalizations.of(context);
     switch (index) {
       case 0:
-        return 'قائمة المنتجات';
+        return l10n.get('product_list');
       case 1:
-        return 'إضافة منتج';
+        return l10n.get('add_product');
       case 2:
-        return 'الإحصائيات';
+        return l10n.get('statistics');
       case 3:
-        return 'الإعدادات';
+        return l10n.get('settings');
       default:
         return '';
     }
