@@ -86,28 +86,67 @@ class _MainScreenState extends State<MainScreen> {
           child: _getScreen(_selectedIndex),
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-        items: [
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.list),
-            label: AppLocalizations.of(context).get('products'),
-          ),
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.add_box),
-            label: AppLocalizations.of(context).get('add'),
-          ),
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.pie_chart),
-            label: AppLocalizations.of(context).get('statistics'),
-          ),
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.settings),
-            label: AppLocalizations.of(context).get('settings'),
-          ),
-        ],
-        type: BottomNavigationBarType.fixed,
+      bottomNavigationBar: AnimatedContainer(
+        duration: const Duration(milliseconds: 350),
+        curve: Curves.easeInOut,
+        child: BottomNavigationBar(
+          currentIndex: _selectedIndex,
+          onTap: _onItemTapped,
+          items: [
+            BottomNavigationBarItem(
+              icon: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 300),
+                child: Icon(
+                  Icons.list,
+                  color: _selectedIndex == 0 ? Colors.deepPurple : Colors.grey,
+                  key: ValueKey(_selectedIndex == 0),
+                ),
+              ),
+              label: AppLocalizations.of(context).get('products'),
+            ),
+            BottomNavigationBarItem(
+              icon: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 300),
+                child: Icon(
+                  Icons.add_box,
+                  color: _selectedIndex == 1 ? Colors.deepPurple : Colors.grey,
+                  key: ValueKey(_selectedIndex == 1),
+                ),
+              ),
+              label: AppLocalizations.of(context).get('add'),
+            ),
+            BottomNavigationBarItem(
+              icon: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 300),
+                child: Icon(
+                  Icons.pie_chart,
+                  color: _selectedIndex == 2 ? Colors.deepPurple : Colors.grey,
+                  key: ValueKey(_selectedIndex == 2),
+                ),
+              ),
+              label: AppLocalizations.of(context).get('statistics'),
+            ),
+            BottomNavigationBarItem(
+              icon: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 300),
+                child: Icon(
+                  Icons.settings,
+                  color: _selectedIndex == 3 ? Colors.deepPurple : Colors.grey,
+                  key: ValueKey(_selectedIndex == 3),
+                ),
+              ),
+              label: AppLocalizations.of(context).get('settings'),
+            ),
+          ],
+          type: BottomNavigationBarType.fixed,
+          selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
+          unselectedLabelStyle: const TextStyle(color: Colors.grey),
+          showUnselectedLabels: true,
+          selectedItemColor: Colors.deepPurple,
+          unselectedItemColor: Colors.grey,
+          elevation: 8,
+          backgroundColor: Colors.white,
+        ),
       ),
       floatingActionButton: _selectedIndex == 0
           ? FloatingActionButton(

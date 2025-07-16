@@ -193,10 +193,12 @@ class _ProductListScreenState extends State<ProductListScreen> {
                               vertical: cardPadding / 2),
                           elevation: 8, // زيادة الظل
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20), // حواف دائرية أكبر
+                            borderRadius:
+                                BorderRadius.circular(20), // حواف دائرية أكبر
                           ),
                           child: Padding(
-                            padding: EdgeInsets.all(isWide ? 20 : 12), // مساحة داخلية أكبر
+                            padding: EdgeInsets.all(
+                                isWide ? 20 : 12), // مساحة داخلية أكبر
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -209,7 +211,8 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                             ConnectionState.done &&
                                         snapshot.data == true) {
                                       return ClipRRect(
-                                        borderRadius: BorderRadius.circular(16), // صورة بحواف دائرية أكبر
+                                        borderRadius: BorderRadius.circular(
+                                            16), // صورة بحواف دائرية أكبر
                                         child: Image.file(
                                           File(product.imagePath!),
                                           width: imageSize + 24, // صورة أكبر
@@ -219,19 +222,22 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                       );
                                     } else {
                                       return Icon(Icons.image,
-                                          size: imageSize + 24, color: Colors.grey);
+                                          size: imageSize + 24,
+                                          color: Colors.grey);
                                     }
                                   },
                                 ),
                                 const SizedBox(width: 20),
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(product.name,
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
-                                              fontSize: fontSize + 2)), // اسم أوضح وأكبر
+                                              fontSize: fontSize +
+                                                  2)), // اسم أوضح وأكبر
                                       const SizedBox(height: 6),
                                       Text(
                                           '${AppLocalizations.of(context).get('amount')}: ${product.amount} $currency',
@@ -240,8 +246,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                               fontSize: fontSize)),
                                       Text(
                                           '${AppLocalizations.of(context).get('category')}: ${product.category}',
-                                          style: TextStyle(
-                                              fontSize: fontSize)),
+                                          style: TextStyle(fontSize: fontSize)),
                                       if (product.notes != null &&
                                           product.notes!.isNotEmpty)
                                         Text(
