@@ -74,11 +74,55 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
+        fontFamily: 'Cairo', // خط حديث وجذاب
+        textTheme: const TextTheme(
+          headlineLarge: TextStyle(fontWeight: FontWeight.bold, fontSize: 28),
+          headlineMedium: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
+          bodyLarge: TextStyle(fontSize: 18),
+          bodyMedium: TextStyle(fontSize: 16),
+        ),
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Color(0xFF512DA8),
+          foregroundColor: Colors.white,
+          elevation: 2,
+        ),
+        cardTheme: const CardTheme(
+          elevation: 4,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(16)),
+          ),
+        ),
+        buttonTheme: const ButtonThemeData(
+          buttonColor: Color(0xFF512DA8),
+          textTheme: ButtonTextTheme.primary,
+        ),
       ),
       darkTheme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
             seedColor: Colors.deepPurple, brightness: Brightness.dark),
         useMaterial3: true,
+        fontFamily: 'Cairo',
+        textTheme: const TextTheme(
+          headlineLarge: TextStyle(fontWeight: FontWeight.bold, fontSize: 28),
+          headlineMedium: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
+          bodyLarge: TextStyle(fontSize: 18),
+          bodyMedium: TextStyle(fontSize: 16),
+        ),
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Color(0xFF311B92),
+          foregroundColor: Colors.white,
+          elevation: 2,
+        ),
+        cardTheme: const CardTheme(
+          elevation: 4,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(16)),
+          ),
+        ),
+        buttonTheme: const ButtonThemeData(
+          buttonColor: Color(0xFF311B92),
+          textTheme: ButtonTextTheme.primary,
+        ),
       ),
       themeMode: _isDarkMode ? ThemeMode.dark : ThemeMode.light,
       localizationsDelegates: const [
